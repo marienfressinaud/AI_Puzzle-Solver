@@ -47,8 +47,7 @@ def main():
         elif choice[0] == 't':
             local_search_type = choice[2:]
         elif choice == 'n':
-            ui.show_ask_number_loops(MIN_LOOPS, MAX_LOOPS)
-            nb_loops = ui.ask_number(MIN_LOOPS, MAX_LOOPS)
+            nb_loops = ui.ask_number_loops(MIN_LOOPS, MAX_LOOPS)
         elif choice == 's':
             ui.show_configuration(local_search_type, level, nb_loops)
 

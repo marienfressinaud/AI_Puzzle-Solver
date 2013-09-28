@@ -89,12 +89,13 @@ def ask_game():
 
 	assert(0)
 
-def show_ask_number_loops(_min, _max):
+def ask_number_loops(_min, _max):
 	"""
 	Show a message to ask a number of loops between _min and _max
 	"""
 
 	print "Choose a number of loops between %d and %d" % (_min, _max)
+	return ask_number(_min, _max)
 
 def show_configuration(local_search_type, level, nb_loops):
 	"""
