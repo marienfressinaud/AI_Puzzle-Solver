@@ -14,6 +14,11 @@ def run_game(game_type, local_search_type, level):
     game.generate(level)
     game.run()
 
+    if game.number_steps >= game.max_steps:
+        ui.show_non_perfect_game(game.number_steps)
+    else:
+        ui.show_perfect_game(game.number_steps)
+
 def main():
     """
     Program entry point. Here is the main loop which waits for an exit

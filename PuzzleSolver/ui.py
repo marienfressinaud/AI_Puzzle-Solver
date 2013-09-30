@@ -113,3 +113,9 @@ def show_configuration(local_search_type, level, nb_loops):
 Level: %s
 Number of loops: %d""" \
 	% (local_search_type, level, nb_loops)
+
+def show_non_perfect_game(nb_steps):
+    print "Out of steps (%d)! We have only a non perfect result..." % nb_steps
+
+def show_perfect_game(nb_steps):
+	print "Game has been resolved in %d steps!" % nb_steps
