@@ -1,14 +1,18 @@
 #!/bin/env python2
 # -*- coding: utf-8 -*-
 
+from LocalSearchGames.factory import Factory
 import ui
 
-def run_game(game, local_search_type, level):
+def run_game(game_type, local_search_type, level):
     """
     Function which runs a game according to the current configuration
     """
 
-    print "not implemented"
+    game = Factory.build(game_type, local_search_type)
+
+    game.generate(level)
+    game.run()
 
 def main():
     """
@@ -20,7 +24,7 @@ def main():
 
     choice = None
     level = "easy"
-    local_search_type = "min"
+    local_search_type = "mc"
     nb_loops = 5
 
     while choice != 'q':
@@ -30,7 +34,7 @@ def main():
             choice = ui.ask_choice((
                 'p',
                 'l easy', 'l medium', 'l hard',
-                't sa', 't min',
+                't sa', 't mc',
                 'n', 's',
                 'q'
             )).lower()

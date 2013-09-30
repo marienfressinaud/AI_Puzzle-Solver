@@ -62,7 +62,7 @@ def show_menu():
 	print """
 =	(P)lay
 =	(L)evel easy | medium | hard
-=	Local Search (T)ype SA | Min
+=	Local Search (T)ype SA | MC
 =	(N)umber of loops
 =	(S)ee configuration
 =	(Q)uit
@@ -85,7 +85,7 @@ def ask_game():
 	elif choice == 2:
 		return "graph-coloring"
 	elif choice == 3:
-		return "third-game"
+		return "TODO"
 
 	assert(0)
 
@@ -102,7 +102,7 @@ def show_configuration(local_search_type, level, nb_loops):
 	Print the current configuration
 	"""
 
-	if local_search_type == "min":
+	if local_search_type == "mc":
 		local_search_type = "Min Conflicts"
 	elif local_search_type == "sa":
 		local_search_type = "Simulated Annealing"
