@@ -17,18 +17,18 @@ class Game(object):
 
     def generate(self, level):
         """
-        Generate a new game. Level determines how hard the game will be
+        Generates a new game. Level determines how hard the game will be
         """
 
+        self.max_steps = 10000
         if level == "easy":
             self.level = GameLevel.EASY
-            self.max_steps = 100
         elif level == "medium":
             self.level = GameLevel.MEDIUM
-            self.max_steps = 1000
         elif level == "hard":
             self.level = GameLevel.HARD
-            self.max_steps = 200 # not too much to keep good performances
+            # not too much steps to keep good performances
+            self.max_steps = 200
         else:
             assert(0)
 

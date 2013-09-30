@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from random import randint
+from random import randint, choice
 
 from game_levels import GameLevel
 
@@ -13,6 +13,7 @@ class StateManager(object):
     def __init__(self):
         self.exists = False
         self.vars = {}
+        self.constraints = []
 
     def build_new_game(self, level):
         """
@@ -21,14 +22,6 @@ class StateManager(object):
         """
 
         self.exists = True
-
-    def count_constraint_violated(self, var, max_count=None):
-        """
-        Counts number of constraint violations for a given variable
-        Must be implemented by child classes
-        """
-
-        pass
 
     def get_random_conflict_variable(self):
         """
@@ -41,25 +34,15 @@ class StateManager(object):
         var = None
         nb_constraints = 0
         while nb_constraints <= 0:
-            i = randint(0, self.K)
-            for v in self.vars:
-                if v[0] == i:
-                    nb_constraints = self.count_constraint_violated(v)
-                    var = {
-                        "id": v,
-                        "val": nb_constraints
-                    }
-                    break
+            v = choice(self.vars.keys())
+            nb_constraints = self.count_constraint_violated(v)
+            var = {
+                "id": v,
+                "val": self.vars[v],
+                "constraints": nb_constraints
+            }
 
         return var
-
-    def list_constraints_variables(self, selected_var):
-        """
-        Returns a generator of possible future "position" for selected_var
-        and indicates number of constraint violations
-        """
-
-        pass
 
     def is_optimal(self):
         """
@@ -72,9 +55,26 @@ class StateManager(object):
 
         return True
 
-    def upstate(self, prev_var, next_var):
+    def list_next_states(self, var):
         """
-        Update current state by giving prev_var value to next_var
+        Generates different states for a given variable
+        Must be implemented by child classes
+        """
+
+        pass
+
+    def count_constraint_violated(self, var, max_count=None):
+        """
+        Counts number of constraint violations for a given variable
+        Must be implemented by child classes
+        """
+
+        pass
+
+    def upstate(self, state):
+        """
+        Updates current state with state parameter
+        Returns the previous state (constraints attribute is not updated)
         Must be implemented by child classes
         """
 
@@ -105,6 +105,10 @@ class KQueensManager(StateManager):
             j = randint(0, self.K - 1)
             self.vars[(i, j)] = (i, j)
 
+        # Here, we can consider constraints is the same as vars (it works well)
+        # But be careful, vars is a dictionary and constraints a list
+        self.constraints = self.vars.values()
+
     def build_new_game(self, level):
         super(KQueensManager, self).build_new_game(level)
 
@@ -122,6 +126,7 @@ class KQueensManager(StateManager):
 
         for queen_j in self.vars:
             if queen_i == queen_j:
+                # don't compare a queen with itself (herself?)
                 continue
 
             list_col = (
@@ -138,41 +143,43 @@ class KQueensManager(StateManager):
 
         return count
 
-    def list_constraints_variables(self, selected_var):
-        i = selected_var["id"][0]
-        list_vars = []
+    def list_next_states(self, var):
+        i = var["id"][0]
+        list_states = []
 
         # max_count permits to increase drastically performance
         # we consider only better positions (less constraint violations)
         # than the current one
-        max_count = selected_var["val"]
+        max_count = var["constraints"]
         for j in xrange(self.K):
             v = (i, j)
 
             nb_constraints = self.count_constraint_violated(v, max_count)
             # We have to adjust nb_constraint to avoid selected_var effect
             adjust = 1
-            if j == selected_var["id"][1]:
+            if j == var["id"][1]:
                 adjust = 0
             nb_constraints -= adjust
 
-            list_vars.append({
-                "id": v,
-                "val": nb_constraints
+            list_states.append({
+                "id": var["id"],
+                "val": v,
+                "constraints": nb_constraints
             })
 
             max_count = min(max_count, nb_constraints)
 
-        return list_vars
+        return list_states
 
-    def upstate(self, prev_var, next_var):
-        prev_pos = prev_var["id"]
-        next_pos = next_var["id"]
+    def upstate(self, state):
+        prev_pos = state["id"]
+        next_pos = state["val"]
 
-        if prev_pos in self.vars:
-            self.vars.pop(prev_pos, None)
-
+        assert(prev_pos in self.vars)
+        self.vars.pop(prev_pos, None)
         self.vars[next_pos] = next_pos
+
+        self.constraints = self.vars.values()
 
     def __str__(self):
         """
@@ -202,3 +209,96 @@ class ColorGraphManager(StateManager):
 
     def __init__(self):
         super(ColorGraphManager, self).__init__()
+
+    def __build_graph(self):
+        """
+        Read file with the given filename (into data/ directory) and generates
+        graph following graph-color-format.txt file.
+        We give a random color value for each vertice (int between 1 and self.K)
+        Vertices are stored in self.vars and edges in self.constraints
+        """
+
+        # TODO: check file format and errors
+        f = open("data/%s" % self.filename)
+
+        self.nb_v, self.nb_e = (int(x) for x in f.readline().split())
+
+        for i in xrange(self.nb_v):
+            v = [float(x) for x in f.readline().split()]
+            self.vars[int(v[0])] = randint(1, self.K)
+            #self.coords[int(v[0])] = {"x": v[1], "y": v[2]}
+
+        for i in xrange(self.nb_e):
+            e = [int(x) for x in f.readline().split()]
+            self.constraints.append(e)
+
+        f.close()
+
+    def build_new_game(self, level):
+        super(ColorGraphManager, self).build_new_game(level)
+
+        self.K = 4
+
+        # TODO not sure graph-color-1 is the easy one (same for 2 and 3)
+        if level == GameLevel.EASY:
+            self.filename = "graph-color-1.txt"
+        elif level == GameLevel.MEDIUM:
+            self.filename = "graph-color-2.txt"
+        else:
+            self.filename = "graph-color-3.txt"
+
+        self.__build_graph()
+
+    def count_constraint_violated(self, cur_var_id, max_count=None):
+        count = 0
+
+        for c in self.constraints:
+            if (c[0] == cur_var_id and c[1] == self.vars[cur_var_id]) or \
+                    (c[1] == cur_var_id and c[0] == self.vars[cur_var_id]):
+                count += 1
+
+            if max_count is not None and count - 1 > max_count:
+                return count
+
+        return count
+
+    def list_next_states(self, var):
+        first_color = self.vars[var["id"]]
+        list_states = []
+
+        max_count = var["constraints"]
+        for color in xrange(self.K):
+            self.vars[var["id"]] = color
+            nb_constraints = self.count_constraint_violated(
+                var["id"], max_count)
+
+            list_states.append({
+                "id": var["id"],
+                "val": color,
+                "constraints": nb_constraints
+            })
+
+            max_count = min(max_count, nb_constraints)
+
+        self.vars[var["id"]] = first_color
+        return list_states
+
+    def upstate(self, state):
+        self.vars[state["id"]] = state["val"]
+
+    def __str__(self):
+        """
+        Returns a representation of the current state as a string
+        """
+
+        _str = ""
+
+        for v in self.vars:
+            _str += str(v) + " = " + str(self.vars[v]) + "\n"
+
+        _str += "\n"
+
+        for c in self.constraints:
+            _str += str(c[0]) + " --- " + str(c[1]) + "\n"
+
+        return _str

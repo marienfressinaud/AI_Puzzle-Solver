@@ -30,26 +30,26 @@ class MinConflictsGame(Game):
 
         return self.state_manager.get_random_conflict_variable()
 
-    def get_fewest_conflict_variable(self, selected_var):
+    def get_fewest_conflict_state(self, selected_var):
         """
-        Choose where we can assign selected_var in order to produce
+        Choose a new state we can assign to selected_var in order to produce
         less conflicts
         """
 
         best_vars = [selected_var]
-        for var in self.state_manager.list_constraints_variables(selected_var):
-            if var["id"] == selected_var["id"]:
-                # don't compare selected_var with itself
+        for var in self.state_manager.list_next_states(selected_var):
+            if var["val"] == selected_var["val"]:
+                # don't compare the current value
                 continue
 
-            if var["val"] < best_vars[0]["val"] or \
-                    (best_vars[0]["id"] == selected_var["id"] and \
-                        var["val"] == best_vars[0]["val"]):
+            if var["constraints"] < best_vars[0]["constraints"] or \
+                    (best_vars[0]["val"] == selected_var["val"] and \
+                        var["constraints"] == best_vars[0]["constraints"]):
                 # if constraint value is less than previous constraint values
                 # we regenerate list of best vars. Same if we never change
                 # best_vars (when best_vars[0] == selected_var)
                 best_vars = [var]
-            elif var["val"] == best_vars[0]["val"]:
+            elif var["constraints"] == best_vars[0]["constraints"]:
                 # We extend best_vars if we have multiple best variables
                 # We will selected them randomly after
                 best_vars.append(var)
@@ -65,12 +65,12 @@ class MinConflictsGame(Game):
         while not self.is_terminated():
             self.number_steps += 1
 
-            #print self.state_manager
+            # print self.state_manager
 
             conflict_var = self.get_conflict_variable()
-            new_var = self.get_fewest_conflict_variable(conflict_var)
+            state = self.get_fewest_conflict_state(conflict_var)
 
-            self.state_manager.upstate(conflict_var, new_var)
+            self.state_manager.upstate(state)
 
         #print self.state_manager
 
