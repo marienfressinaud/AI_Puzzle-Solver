@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from game import Game
+from state_managers import KQueensManager, ColorGraphManager
 
 class SimulatedAnnealingGame(Game):
     """
@@ -20,6 +21,8 @@ class KQueensSA(SimulatedAnnealingGame):
     def __init__(self):
         super(KQueensSA, self).__init__()
 
+        self.state_manager = KQueensManager()
+
 class GraphColorSA(SimulatedAnnealingGame):
     """
     Graph color game based on simulated annealing algorithm
@@ -27,3 +30,5 @@ class GraphColorSA(SimulatedAnnealingGame):
 
     def __init__(self):
         super(GraphColorSA, self).__init__()
+
+        self.state_manager = ColorGraphManager()

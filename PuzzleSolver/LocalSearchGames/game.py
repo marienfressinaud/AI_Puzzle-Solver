@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from state_managers import StateManager
+
 class Game(object):
     """
     A Game is a general abstraction for local search based games
@@ -8,7 +10,7 @@ class Game(object):
     """
 
     def __init__(self):
-        self.state_manager = None
+        self.state_manager = StateManager()
         self.level = None
 
     def generate(self, level):
@@ -16,7 +18,7 @@ class Game(object):
         Generate a new game. Level determines how hard the game will be
         """
 
-        pass
+        self.level = level
 
     def run(self):
         """

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from game import Game
+from state_managers import KQueensManager, ColorGraphManager
 
 class MinConflictsGame(Game):
     """
@@ -24,6 +25,8 @@ class KQueensMC(MinConflictsGame):
     def __init__(self):
         super(KQueensMC, self).__init__()
 
+        self.state_manager = KQueensManager()
+
 class GraphColorMC(MinConflictsGame):
     """
     Graph Color game based on min conflicts algorithm
@@ -31,3 +34,5 @@ class GraphColorMC(MinConflictsGame):
 
     def __init__(self):
         super(GraphColorMC, self).__init__()
+
+        self.state_manager = ColorGraphManager()
