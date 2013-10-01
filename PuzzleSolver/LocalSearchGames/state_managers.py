@@ -239,11 +239,10 @@ class ColorGraphManager(StateManager):
 
         self.K = 4
 
-        # TODO not sure graph-color-1 is the easy one (same for 2 and 3)
         if level == GameLevel.EASY:
-            self.filename = "graph-color-1.txt"
-        elif level == GameLevel.MEDIUM:
             self.filename = "graph-color-2.txt"
+        elif level == GameLevel.MEDIUM:
+            self.filename = "graph-color-1.txt"
         else:
             self.filename = "graph-color-3.txt"
 
@@ -253,8 +252,8 @@ class ColorGraphManager(StateManager):
         count = 0
 
         for c in self.constraints:
-            if (c[0] == cur_var_id and c[1] == self.vars[cur_var_id]) or \
-                    (c[1] == cur_var_id and c[0] == self.vars[cur_var_id]):
+            if (c[0] == cur_var_id or c[1] == cur_var_id) and \
+                    (self.vars[c[1]] == self.vars[c[0]]):
                 count += 1
 
             if max_count is not None and count - 1 > max_count:
@@ -267,7 +266,7 @@ class ColorGraphManager(StateManager):
         list_states = []
 
         max_count = var["constraints"]
-        for color in xrange(self.K):
+        for color in xrange(1, self.K + 1):
             self.vars[var["id"]] = color
             nb_constraints = self.count_constraint_violated(
                 var["id"], max_count)
@@ -285,20 +284,3 @@ class ColorGraphManager(StateManager):
 
     def upstate(self, state):
         self.vars[state["id"]] = state["val"]
-
-    def __str__(self):
-        """
-        Returns a representation of the current state as a string
-        """
-
-        _str = ""
-
-        for v in self.vars:
-            _str += str(v) + " = " + str(self.vars[v]) + "\n"
-
-        _str += "\n"
-
-        for c in self.constraints:
-            _str += str(c[0]) + " --- " + str(c[1]) + "\n"
-
-        return _str

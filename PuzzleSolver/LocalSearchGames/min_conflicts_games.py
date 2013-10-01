@@ -4,6 +4,7 @@ from random import randint
 
 from game import Game
 from state_managers import KQueensManager, ColorGraphManager
+from graph_output import draw_graph
 
 class MinConflictsGame(Game):
     """
@@ -65,14 +66,10 @@ class MinConflictsGame(Game):
         while not self.is_terminated():
             self.number_steps += 1
 
-            # print self.state_manager
-
             conflict_var = self.get_conflict_variable()
             state = self.get_fewest_conflict_state(conflict_var)
 
             self.state_manager.upstate(state)
-
-        #print self.state_manager
 
 class KQueensMC(MinConflictsGame):
     """
@@ -93,3 +90,10 @@ class GraphColorMC(MinConflictsGame):
         super(GraphColorMC, self).__init__()
 
         self.state_manager = ColorGraphManager()
+
+    def run(self):
+        draw_graph(self.state_manager, "graph_start.dot")
+
+        super(GraphColorMC, self).run()
+
+        draw_graph(self.state_manager, "graph_end.dot")

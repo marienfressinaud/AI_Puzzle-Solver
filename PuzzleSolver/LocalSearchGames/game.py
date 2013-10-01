@@ -28,7 +28,7 @@ class Game(object):
         elif level == "hard":
             self.level = GameLevel.HARD
             # not too much steps to keep good performances
-            self.max_steps = 200
+            self.max_steps = 1000
         else:
             assert(0)
 
