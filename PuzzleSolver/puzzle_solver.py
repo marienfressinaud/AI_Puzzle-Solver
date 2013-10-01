@@ -29,7 +29,7 @@ def main():
 
     choice = None
     level = "easy"
-    local_search_type = "mc"
+    local_search_type = "sa"
     nb_loops = 5
 
     while choice != 'q':

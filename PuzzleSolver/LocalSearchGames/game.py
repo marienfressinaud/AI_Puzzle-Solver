@@ -14,6 +14,7 @@ class Game(object):
         self.state_manager = StateManager()
         self.level = None
         self.max_steps = 0
+        self.number_steps = 0
 
     def generate(self, level):
         """
@@ -36,25 +37,17 @@ class Game(object):
 
     def run(self):
         """
-        Run the current game.
+        Runs the current game.
         It's just an execution of algorithms in the case of MinConflictsGame
         and SimulatedAnnealingGame classes
         """
 
         pass
 
-    def is_optimal(self):
+    def is_terminated(self):
         """
-        Return True if the current state is an optimal one, False else
-        Must be implemented
-        """
-
-        return False
-
-    def upstate(self, prev_var, new_var):
-        """
-        Update current state by assign prev_var to new_var
-        Must be implemented
+        Returns True if the current state is an optimal one, False else
         """
 
-        pass
+        return self.state_manager.is_optimal() or \
+               self.number_steps >= self.max_steps

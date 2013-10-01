@@ -23,6 +23,19 @@ class StateManager(object):
 
         self.exists = True
 
+    def get_random_variable(self):
+        """
+        Returns a random variable
+        """
+
+        v = choice(self.vars.keys())
+        nb_constraints = self.count_constraint_violated(v)
+        return {
+            "id": v,
+            "val": self.vars[v],
+            "constraints": nb_constraints
+        }
+
     def get_random_conflict_variable(self):
         """
         Returns a random variable which involves in at least one conflict
@@ -32,15 +45,8 @@ class StateManager(object):
         """
 
         var = None
-        nb_constraints = 0
-        while nb_constraints <= 0:
-            v = choice(self.vars.keys())
-            nb_constraints = self.count_constraint_violated(v)
-            var = {
-                "id": v,
-                "val": self.vars[v],
-                "constraints": nb_constraints
-            }
+        while var is None or var["constraints"] <= 0:
+            var = self.get_random_variable()
 
         return var
 
@@ -54,6 +60,20 @@ class StateManager(object):
                 return False
 
         return True
+
+    def generate_random_states(self, n):
+        """
+        Generates n random states
+        """
+
+        list_states = []
+
+        for i in xrange(n):
+            var = self.get_random_variable()
+            states = self.list_next_states(var)
+            list_states.append(choice(states))
+
+        return list_states
 
     def list_next_states(self, var):
         """
@@ -79,6 +99,18 @@ class StateManager(object):
         """
 
         pass
+
+    def inv_state(self, state):
+        """
+        Returns the state which cancel the given state
+        constraints equals 0
+        """
+
+        return {
+            "id": state["id"],
+            "val": self.vars[state["id"]],
+            "constraints": 0
+        }
 
 class KQueensManager(StateManager):
     """
@@ -181,6 +213,13 @@ class KQueensManager(StateManager):
 
         self.constraints = self.vars.values()
 
+    def inv_state(self, state):
+        return {
+            "id": state["val"],
+            "val": self.vars[state["id"]],
+            "constraints": 0
+        }
+
     def __str__(self):
         """
         Returns a representation of the current state as a string
@@ -189,16 +228,16 @@ class KQueensManager(StateManager):
         _str = ""
 
         if self.exists:
-            _str = "-" * (3 * self.K) + "\n"
+            _str = "-" * (4 * self.K) + "\n"
             for i in xrange(self.K):
                 for j in xrange(self.K):
                     if (i, j) in self.vars:
-                        _str += "| Q "
+                        _str += " Q |"
                     else:
-                        _str += "|   "
+                        _str += "   |"
 
                 _str += "\n"
-            _str += "-" * (3 * self.K)
+            _str += "-" * (4 * self.K)
 
         return _str
 

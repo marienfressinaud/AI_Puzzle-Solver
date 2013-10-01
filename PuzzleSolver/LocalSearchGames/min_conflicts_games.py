@@ -20,10 +20,6 @@ class MinConflictsGame(Game):
     def __init__(self):
         super(MinConflictsGame, self).__init__()
 
-    def is_terminated(self):
-        return self.state_manager.is_optimal() or \
-               self.number_steps >= self.max_steps
-
     def get_conflict_variable(self):
         """
         Choose a random variable which involved in at least one conflict
