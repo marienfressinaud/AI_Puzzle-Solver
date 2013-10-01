@@ -4,7 +4,8 @@ from math import exp
 from random import random, choice
 
 from game import Game
-from state_managers import KQueensManager, ColorGraphManager
+from kqueens_manager import KQueensManager
+from color_graph_manager import ColorGraphManager
 from graph_output import draw_graph
 
 class SimulatedAnnealingGame(Game):

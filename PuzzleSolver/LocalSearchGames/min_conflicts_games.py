@@ -3,7 +3,8 @@
 from random import randint
 
 from game import Game
-from state_managers import KQueensManager, ColorGraphManager
+from kqueens_manager import KQueensManager
+from color_graph_manager import ColorGraphManager
 from graph_output import draw_graph
 
 class MinConflictsGame(Game):
@@ -76,6 +77,13 @@ class KQueensMC(MinConflictsGame):
         super(KQueensMC, self).__init__()
 
         self.state_manager = KQueensManager()
+
+    def run(self):
+        print self.state_manager
+
+        super(KQueensMC, self).run()
+
+        print self.state_manager
 
 class GraphColorMC(MinConflictsGame):
     """

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from state_managers import StateManager
+from state_manager import StateManager
 from game_levels import GameLevel
 
 class Game(object):
