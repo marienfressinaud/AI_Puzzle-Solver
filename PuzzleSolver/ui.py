@@ -75,16 +75,10 @@ def ask_game():
 (2) Graph Coloring
 (3) Third game (not yet chosen)
 """
+    games = ["k-queens", "graph-coloring", "TODO"]
 
-    choice = ask_number(1, 3)
-    if choice == 1:
-        return "k-queens"
-    elif choice == 2:
-        return "graph-coloring"
-    elif choice == 3:
-        return "TODO"
-
-    assert(0)
+    choice = ask_number(1, len(games))
+    return games[choice - 1]
 
 
 def ask_number_loops(_min, _max):

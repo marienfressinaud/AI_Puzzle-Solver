@@ -34,22 +34,42 @@ def run_games(game, env):
         exec_game(game, env["local_search_type"], env["level"])
 
 
+def __set_env(env, var, val):
+    """
+    Sets a value to a variable of the environment
+    """
+
+    check_values = {
+        "level": ["easy", "medium", "hard"],
+        "local_search_type": ["mc", "sa"],
+        "nb_loops": xrange(MIN_LOOPS, MAX_LOOPS)
+    }
+
+    if var in check_values and val in check_values[var]:
+        env[var] = val
+
+
 def exec_choice(choice, env):
     """
     Executes a command
     """
 
-    if choice[0] == "p":
-        game = ui.ask_game()
-        run_games(game, env)
-    elif choice[0] == "l":
-        env["level"] = choice[1]
-    elif choice[0] == "t":
-        env["local_search_type"] = choice[1]
-    elif choice[0] == "n":
-        env["nb_loops"] = ui.ask_number_loops(MIN_LOOPS, MAX_LOOPS)
-    else:
-        ui.show_configuration(env)
+    actions = {
+        "p": lambda env, *args: run_games(ui.ask_game(), env),
+        "l": lambda env, *args: __set_env(env, "level", args[0]),
+        "t": lambda env, *args: __set_env(env, "local_search_type", args[0]),
+        "n": lambda env, *args: __set_env(
+            env, "nb_loops", ui.ask_number_loops(MIN_LOOPS, MAX_LOOPS)
+        ),
+        "s": lambda env, *args: ui.show_configuration(env)
+    }
+
+    if choice[0] in actions:
+        args = None
+        if len(choice) > 1:
+            args = choice[1]
+
+        actions[choice[0]](env, args)
 
 
 def main():

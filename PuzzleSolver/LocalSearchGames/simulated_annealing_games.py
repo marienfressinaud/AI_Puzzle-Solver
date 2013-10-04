@@ -36,7 +36,6 @@ class SimulatedAnnealingGame(Game):
             self.state_manager.upstate(state)
 
         _eval = SimulatedAnnealingGame.EVAL_MAX
-
         for v in self.state_manager.vars:
             _eval -= self.state_manager.count_constraint_violated(v)
 
