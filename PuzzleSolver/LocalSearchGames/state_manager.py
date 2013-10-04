@@ -111,3 +111,6 @@ class StateManager(object):
         """
 
         self.state = new_state
+
+    def __str__(self):
+        return str(self.state)

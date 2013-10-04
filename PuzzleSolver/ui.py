@@ -113,6 +113,14 @@ Verbosity %s""" \
     % (local_search_type, level, nb_loops, verbosity)
 
 
+def show_not_exists_file(filename):
+    print "Oops, %s doesn't exist in data directory" % filename
+
+
+def show_invalid_file(filename):
+    print "Oops, `%s` seems to be an invalid file" % filename
+
+
 def show_non_perfect_game(nb_steps):
     print "Out of steps (%d)! We have only a non perfect result..." % nb_steps
 

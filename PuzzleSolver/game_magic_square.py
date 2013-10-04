@@ -43,7 +43,7 @@ class MagicSquareManager(StateManager):
         elif level == GameLevel.MEDIUM:
             self.N = 12
         else:
-            self.N = 20  # TODO: change levels
+            self.N = 20
 
         self.sum = (self.N * (self.N**2 + 1)) / 2
 

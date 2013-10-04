@@ -8,6 +8,7 @@ from LocalSearchGames.state_manager import StateManager
 from LocalSearchGames.game_levels import GameLevel
 from LocalSearchGames.constraints import MustBeDifferentConstraint
 from graph_output import draw_graph
+from ui import show_not_exists_file, show_invalid_file
 
 
 class ColorGraphManager(StateManager):
@@ -22,7 +23,7 @@ class ColorGraphManager(StateManager):
         try:
             return (int(x) for x in file.readline().split())
         except ValueError:
-            print "Oops, %s seems to be an invalid file" % self.filename
+            show_invalid_file(self.filename)
             exit(-1)
 
     def __read_node(self, file):
@@ -31,7 +32,7 @@ class ColorGraphManager(StateManager):
             node[0] = int(node[0])
             return node
         else:
-            print "Oops, %s seems to be an invalid file" % self.filename
+            show_invalid_file(self.filename)
             exit(-1)
 
     def __read_edge(self, file):
@@ -39,7 +40,7 @@ class ColorGraphManager(StateManager):
         if len(edge) == 2:
             return edge
         else:
-            print "Oops, %s seems to be an invalid file" % self.filename
+            show_invalid_file(self.filename)
             exit(-1)
 
     def __build_graph(self):
@@ -50,11 +51,10 @@ class ColorGraphManager(StateManager):
         Vertices are stored in self.vars and edges in self.constraints
         """
 
-        # TODO: check file format and errors
         try:
             f = open("data/%s" % self.filename)
         except IOError:
-            print "Oops, %s doesn't exist in data directory" % self.filename
+            show_not_exists_file(self.filename)
             exit(-1)
 
         self.nb_v, self.nb_e = self.__read_multiplicities(f)
