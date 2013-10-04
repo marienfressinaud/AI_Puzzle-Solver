@@ -26,23 +26,15 @@ class SimulatedAnnealingGame(Game):
 
         self.t = SimulatedAnnealingGame.T_MAX
 
-    def evaluate(self, state=None):
+    def evaluate(self, state):
         """
         Evaluates a state (objective function)
         Min value is 1 and max value is SimulatedAnnealingGame.EVAL_MAX
         """
 
-        if state is not None:
-            state_begin = self.state_manager.inv_state(state)
-            self.state_manager.upstate(state)
-
         _eval = SimulatedAnnealingGame.EVAL_MAX
         for v in self.state_manager.vars:
-            _eval -= self.state_manager.count_constraint_violated(v)
-
-        if state is not None:
-            assert(state_begin is not None)
-            self.state_manager.upstate(state_begin)
+            _eval -= self.state_manager.count_constraint_violated(state, v)
 
         return max(1, _eval)
 
@@ -71,7 +63,7 @@ class SimulatedAnnealingGame(Game):
         Runs simulated annealing algorithm
         """
 
-        eval_state = self.evaluate()
+        eval_state = self.evaluate(self.state_manager.state)
         self.number_steps = 0
 
         # while not F(P) ≥ F_target

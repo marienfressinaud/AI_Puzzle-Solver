@@ -12,10 +12,20 @@ class StateManager(object):
     def __init__(self):
         self.vars = {}
         self.constraints = []
+        self.state = {}
+
+    def generate_game(self):
+        """
+        Generates a new state by choosing a random value for each vars
+        """
+
+        for v in self.vars:
+            self.state[v] = choice(self.vars[v])
 
     def build_new_game(self, level):
         """
         Generates a new game.
+        Must be implemented by child classes
         """
 
         pass
@@ -25,13 +35,7 @@ class StateManager(object):
         Returns a random variable
         """
 
-        v = choice(self.vars.keys())
-        nb_constraints = self.count_constraint_violated(v)
-        return {
-            "id": v,
-            "val": self.vars[v],
-            "constraints": nb_constraints
-        }
+        return choice(self.state.keys())
 
     def get_random_conflict_variable(self):
         """
@@ -42,7 +46,8 @@ class StateManager(object):
         """
 
         var = None
-        while var is None or var["constraints"] <= 0:
+        while var is None or \
+                self.count_constraint_violated(self.state, var) <= 0:
             var = self.get_random_variable()
 
         return var
@@ -52,8 +57,8 @@ class StateManager(object):
         Return True if all variables are constraint violation free
         """
 
-        for v in self.vars:
-            if self.count_constraint_violated(v) > 0:
+        for var in self.state:
+            if self.count_constraint_violated(self.state, var) > 0:
                 return False
 
         return True
@@ -72,39 +77,41 @@ class StateManager(object):
 
         return list_states
 
-    def list_next_states(self, var):
+    def list_next_states(self, var_id):
         """
         Generates different states for a given variable
-        Must be implemented by child classes
         """
 
-        pass
+        list_states = []
+        for val in self.vars[var_id]:
+            # We get all values of the domain
+            # if val is different than the current one, we create a new state
+            if val != self.state[var_id]:
+                new_state = self.state.copy()
+                new_state[var_id] = val
+                list_states.append(new_state)
 
-    def count_constraint_violated(self, var, max_count=None):
+        return list_states
+
+    def count_constraint_violated(self, state, var_id, max_count=None):
         """
         Counts number of constraint violations for a given variable
-        Must be implemented by child classes
         """
 
-        pass
+        count = 0
 
-    def upstate(self, state):
+        for c in self.constraints:
+            c_is_ok = c.check(state)
+            count += 1 * (not c_is_ok)
+
+            if max_count is not None and count - 1 > max_count:
+               break
+
+        return count
+
+    def upstate(self, new_state):
         """
         Updates current state with state parameter
-        Returns the previous state (constraints attribute is not updated)
-        Must be implemented by child classes
         """
 
-        pass
-
-    def inv_state(self, state):
-        """
-        Returns the state which cancel the given state
-        constraints equals 0
-        """
-
-        return {
-            "id": state["id"],
-            "val": self.vars[state["id"]],
-            "constraints": 0
-        }
+        self.state = new_state

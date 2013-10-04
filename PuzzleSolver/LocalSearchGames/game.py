@@ -35,6 +35,7 @@ class Game(object):
             self.max_steps = 1000
 
         self.state_manager.build_new_game(self.level)
+        self.state_manager.generate_game()
 
     def run(self):
         """
