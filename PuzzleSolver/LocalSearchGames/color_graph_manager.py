@@ -39,8 +39,6 @@ class ColorGraphManager(StateManager):
         f.close()
 
     def build_new_game(self, level):
-        super(ColorGraphManager, self).build_new_game(level)
-
         self.K = 4
 
         if level == GameLevel.EASY:

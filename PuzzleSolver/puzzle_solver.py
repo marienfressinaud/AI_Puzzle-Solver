@@ -80,7 +80,7 @@ def main():
     choice = None
     env = {
         "level": "easy",
-        "local_search_type": "sa",
+        "local_search_type": "mc",
         "nb_loops": 5
     }
 

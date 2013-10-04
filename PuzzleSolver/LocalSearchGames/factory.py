@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from min_conflicts_games import KQueensMC, GraphColorMC
-from simulated_annealing_games import KQueensSA, GraphColorSA
+from min_conflicts_games import KQueensMC, GraphColorMC, MagicSquareMC
+from simulated_annealing_games import KQueensSA, GraphColorSA, MagicSquareSA
 
 
 class Factory():
@@ -20,19 +20,19 @@ class Factory():
         assert(
             game_type == "k-queens" or
             game_type == "graph-coloring" or
-            game_type == "TODO"
+            game_type == "magic-square"
         )
 
         games = {
             "mc": {
                 "k-queens": KQueensMC,
                 "graph-coloring": GraphColorMC,
-                "TODO": None
+                "magic-square": MagicSquareMC
             },
             "sa": {
                 "k-queens": KQueensSA,
                 "graph-coloring": GraphColorSA,
-                "TODO": None
+                "magic-square": MagicSquareSA
             }
         }
 

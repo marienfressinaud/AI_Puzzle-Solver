@@ -73,9 +73,9 @@ def ask_game():
     print """
 (1) K-Queens
 (2) Graph Coloring
-(3) Third game (not yet chosen)
+(3) Magic square
 """
-    games = ["k-queens", "graph-coloring", "TODO"]
+    games = ["k-queens", "graph-coloring", "magic-square"]
 
     choice = ask_number(1, len(games))
     return games[choice - 1]

@@ -6,6 +6,7 @@ from random import random, choice
 from game import Game
 from kqueens_manager import KQueensManager
 from color_graph_manager import ColorGraphManager
+from magic_square_manager import MagicSquareManager
 from graph_output import draw_graph
 
 
@@ -132,3 +133,21 @@ class GraphColorSA(SimulatedAnnealingGame):
         super(GraphColorSA, self).run()
 
         draw_graph(self.state_manager, "graph_end.dot")
+
+
+class MagicSquareSA(SimulatedAnnealingGame):
+    """
+    Magic Square game based on simulated annealing algorithm
+    """
+
+    def __init__(self):
+        super(MagicSquareSA, self).__init__()
+
+        self.state_manager = MagicSquareManager()
+
+    def run(self):
+        print self.state_manager
+
+        super(MagicSquareSA, self).run()
+
+        print self.state_manager

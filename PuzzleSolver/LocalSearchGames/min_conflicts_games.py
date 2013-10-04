@@ -5,6 +5,7 @@ from random import randint
 from game import Game
 from kqueens_manager import KQueensManager
 from color_graph_manager import ColorGraphManager
+from magic_square_manager import MagicSquareManager
 from graph_output import draw_graph
 
 
@@ -102,3 +103,21 @@ class GraphColorMC(MinConflictsGame):
         super(GraphColorMC, self).run()
 
         draw_graph(self.state_manager, "graph_end.dot")
+
+
+class MagicSquareMC(MinConflictsGame):
+    """
+    Magic Square game based on min conflicts algorithm
+    """
+
+    def __init__(self):
+        super(MagicSquareMC, self).__init__()
+
+        self.state_manager = MagicSquareManager()
+
+    def run(self):
+        print self.state_manager
+
+        super(MagicSquareMC, self).run()
+
+        print self.state_manager

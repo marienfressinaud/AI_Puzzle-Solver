@@ -9,6 +9,7 @@ from game_levels import GameLevel
 class KQueensManager(StateManager):
     """
     State manager for a K-Queens game
+    TODO: improve this manager!!
     """
 
     def __init__(self):
@@ -33,8 +34,6 @@ class KQueensManager(StateManager):
         self.constraints = self.vars.values()
 
     def build_new_game(self, level):
-        super(KQueensManager, self).build_new_game(level)
-
         if level == GameLevel.EASY:
             self.K = 8
         elif level == GameLevel.MEDIUM:
