@@ -2,6 +2,7 @@
 
 from random import choice
 
+
 class StateManager(object):
     """
     A StateManager manages states of a game.

@@ -5,6 +5,7 @@ from random import randint
 from state_manager import StateManager
 from game_levels import GameLevel
 
+
 class ColorGraphManager(StateManager):
     """
     State manager for a Color Graph game
@@ -17,7 +18,7 @@ class ColorGraphManager(StateManager):
         """
         Read file with the given filename (into data/ directory) and generates
         graph following graph-color-format.txt file.
-        We give a random color value for each vertice (int between 1 and self.K)
+        We give random color value for each vertice (int between 1 and self.K)
         Vertices are stored in self.vars and edges in self.constraints
         """
 

@@ -3,6 +3,7 @@
 from state_manager import StateManager
 from game_levels import GameLevel
 
+
 class Game(object):
     """
     A Game is a general abstraction for local search based games
@@ -50,4 +51,4 @@ class Game(object):
         """
 
         return self.state_manager.is_optimal() or \
-               self.number_steps >= self.max_steps
+            self.number_steps >= self.max_steps

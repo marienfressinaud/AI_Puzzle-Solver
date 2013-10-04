@@ -8,14 +8,15 @@ from kqueens_manager import KQueensManager
 from color_graph_manager import ColorGraphManager
 from graph_output import draw_graph
 
+
 class SimulatedAnnealingGame(Game):
     """
     A SimulatedAnnealingGame must implement simulated annealing algorithm.
-    A basic algorithm consists to evaluate neighboring states based on a certain
+    Basic algorithm consists to evaluate neighboring states based on a certain
     "temperature" which determine how we should explore or exploite the game
     """
 
-    T_MAX = 10.0 # TODO I choose this value randomly, but it seems good
+    T_MAX = 10.0  # TODO I choose this value randomly, but it seems good
     N_GENERATION = 10
     EVAL_MAX = 500.0
 
@@ -45,6 +46,19 @@ class SimulatedAnnealingGame(Game):
 
         return max(0, _eval)
 
+    def __get_best_state(self, neighbors):
+        state_max = None
+        eval_state_max = 0.0
+
+        for new_state in neighbors:
+            _eval = self.evaluate(new_state)
+
+            if _eval > eval_state_max:
+                state_max = new_state
+                eval_state_max = _eval
+
+        return (state_max, eval_state_max)
+
     def lower_temperature(self):
         """
         A simple function to decrease self.t value
@@ -66,14 +80,7 @@ class SimulatedAnnealingGame(Game):
 
             neighbors = self.state_manager.generate_random_states(
                 SimulatedAnnealingGame.N_GENERATION)
-            state_max = None
-            eval_state_max = 0.0
-            for new_state in neighbors:
-                _eval = self.evaluate(new_state)
-
-                if _eval > eval_state_max:
-                    state_max = new_state
-                    eval_state_max = _eval
+            (state_max, eval_state_max) = self.__get_best_state(neighbors)
 
             q = (eval_state_max - eval_state) / eval_state
             try:
@@ -91,6 +98,7 @@ class SimulatedAnnealingGame(Game):
 
             self.lower_temperature()
 
+
 class KQueensSA(SimulatedAnnealingGame):
     """
     K-Queens game based on simulated annealing algorithm
@@ -107,6 +115,7 @@ class KQueensSA(SimulatedAnnealingGame):
         super(KQueensSA, self).run()
 
         print self.state_manager
+
 
 class GraphColorSA(SimulatedAnnealingGame):
     """

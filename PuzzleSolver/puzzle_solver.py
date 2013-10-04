@@ -4,7 +4,12 @@
 from LocalSearchGames.factory import Factory
 import ui
 
-def run_game(game_type, local_search_type, level):
+
+MIN_LOOPS = 1
+MAX_LOOPS = 2000
+
+
+def exec_game(game_type, local_search_type, level):
     """
     Function which runs a game according to the current configuration
     """
@@ -19,46 +24,59 @@ def run_game(game_type, local_search_type, level):
     else:
         ui.show_perfect_game(game.number_steps)
 
+
+def run_games(game, env):
+    """
+    Executes a game for a certain number of loops
+    """
+
+    for i in xrange(env["nb_loops"]):
+        exec_game(game, env["local_search_type"], env["level"])
+
+
+def exec_choice(choice, env):
+    """
+    Executes a command
+    """
+
+    if choice[0] == "p":
+        game = ui.ask_game()
+        run_games(game, env)
+    elif choice[0] == "l":
+        env["level"] = choice[1]
+    elif choice[0] == "t":
+        env["local_search_type"] = choice[1]
+    elif choice[0] == "n":
+        env["nb_loops"] = ui.ask_number_loops(MIN_LOOPS, MAX_LOOPS)
+    else:
+        ui.show_configuration(env)
+
+
 def main():
     """
     Program entry point. Here is the main loop which waits for an exit
     """
 
-    MIN_LOOPS = 1
-    MAX_LOOPS = 2000
-
     choice = None
-    level = "easy"
-    local_search_type = "sa"
-    nb_loops = 5
+    env = {
+        "level": "easy",
+        "local_search_type": "sa",
+        "nb_loops": 5
+    }
 
-    while choice != 'q':
+    while choice != "q":
         ui.show_menu()
 
-        try:
-            choice = ui.ask_choice((
-                'p',
-                'l easy', 'l medium', 'l hard',
-                't sa', 't mc',
-                'n', 's',
-                'q'
-            )).lower()
-        except EOFError:
-            choice = 'q'
+        choice = ui.ask_choice((
+            "p",
+            "l easy", "l medium", "l hard",
+            "t sa", "t mc",
+            "n", "s",
+            "q"
+        )).lower()
 
-        if choice == 'p':
-            game = ui.ask_game()
+        exec_choice(choice.split(), env)
 
-            for i in xrange(nb_loops):
-                run_game(game, local_search_type, level)
-        elif choice[0] == 'l':
-            level = choice[2:]
-        elif choice[0] == 't':
-            local_search_type = choice[2:]
-        elif choice == 'n':
-            nb_loops = ui.ask_number_loops(MIN_LOOPS, MAX_LOOPS)
-        elif choice == 's':
-            ui.show_configuration(local_search_type, level, nb_loops)
 
 if __name__ == "__main__":
     main()

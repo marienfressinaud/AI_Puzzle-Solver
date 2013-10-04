@@ -5,6 +5,7 @@ from random import randint
 from state_manager import StateManager
 from game_levels import GameLevel
 
+
 class KQueensManager(StateManager):
     """
     State manager for a K-Queens game

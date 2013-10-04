@@ -7,6 +7,7 @@ from kqueens_manager import KQueensManager
 from color_graph_manager import ColorGraphManager
 from graph_output import draw_graph
 
+
 class MinConflictsGame(Game):
     """
     A MinConflictsGame must implement min conflicts algorithm.
@@ -41,7 +42,7 @@ class MinConflictsGame(Game):
                 continue
 
             if var["constraints"] < best_vars[0]["constraints"] or \
-                    (best_vars[0]["val"] == selected_var["val"] and \
+                    (best_vars[0]["val"] == selected_var["val"] and
                         var["constraints"] == best_vars[0]["constraints"]):
                 # if constraint value is less than previous constraint values
                 # we regenerate list of best vars. Same if we never change
@@ -68,6 +69,7 @@ class MinConflictsGame(Game):
 
             self.state_manager.upstate(state)
 
+
 class KQueensMC(MinConflictsGame):
     """
     K-Queens game based on min conflicts algorithm
@@ -84,6 +86,7 @@ class KQueensMC(MinConflictsGame):
         super(KQueensMC, self).run()
 
         print self.state_manager
+
 
 class GraphColorMC(MinConflictsGame):
     """
