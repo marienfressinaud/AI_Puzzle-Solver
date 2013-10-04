@@ -29,7 +29,7 @@ class SimulatedAnnealingGame(Game):
     def evaluate(self, state=None):
         """
         Evaluates a state (objective function)
-        Min value is 0 and max value is SimulatedAnnealingGame.EVAL_MAX
+        Min value is 1 and max value is SimulatedAnnealingGame.EVAL_MAX
         """
 
         if state is not None:
@@ -44,7 +44,7 @@ class SimulatedAnnealingGame(Game):
             assert(state_begin is not None)
             self.state_manager.upstate(state_begin)
 
-        return max(0, _eval)
+        return max(1, _eval)
 
     def __get_best_state(self, neighbors):
         state_max = None

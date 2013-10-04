@@ -59,7 +59,7 @@ class ColorGraphManager(StateManager):
                 count += 1
 
             if max_count is not None and count - 1 > max_count:
-                return count
+                break
 
         return count
 

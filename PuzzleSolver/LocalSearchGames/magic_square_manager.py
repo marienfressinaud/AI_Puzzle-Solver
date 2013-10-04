@@ -19,20 +19,22 @@ class MagicSquareManager(StateManager):
 
     def __generate_numbers(self):
         self.vars = {}
+        # _list_tmp = [6,7,2,1,5,9,8,3,4]
         for i in xrange(self.N * self.N):
-            self.vars[i] = randint(1, self.sum - 1)
+            self.vars[i] = randint(1, self.N * self.N)
+            # self.vars[i] = _list_tmp[i]
 
         self.constraints = self.vars.keys()
 
     def build_new_game(self, level):
         if level == GameLevel.EASY:
-            self.N = 4
+            self.N = 3
         elif level == GameLevel.MEDIUM:
-            self.N = 10
+            self.N = 12
         else:
-            self.N = 15  # TODO: change levels
+            self.N = 20  # TODO: change levels
 
-        self.sum = (self.N * (self.N ** 2 + 1)) / 2
+        self.sum = (self.N * (self.N**2 + 1)) / 2
 
         self.__generate_numbers()
 
@@ -41,42 +43,31 @@ class MagicSquareManager(StateManager):
 
         var_i = var_id % self.N
         var_j = var_id / self.N
-        val = self.vars[var_id]
 
         # check number is different
-        count += self.vars.values().count(val)
-
-        # check sum of diagonals
-        if var_i == var_j:
-            num = 0
-            for i in [(j*self.N + j) for j in xrange(self.N)]:
-                num += self.vars[i]
-
-            if num != self.sum:
-                count += 1
-
-        if var_i == self.N-1 - var_j:
-            num = 0
-            for i in [((self.N-1) * (self.N-j)) for j in xrange(self.N)]:
-                num += self.vars[i]
-
-            if num != self.sum:
-                count += 1
+        # TODO with this counstraint, algo is really bad
+        # count += self.vars.values().count(self.vars[var_id]) - 1
 
         # check sum of row and column
-        num = 0
-        for i in [(var_j*self.N + j) for j in xrange(self.N)]:
-            num += self.vars[i]
+        list_list_index = [
+            [(var_j*self.N + i) for i in xrange(self.N)],
+            [(var_i + self.N*i) for i in xrange(self.N)]
+        ]
+        # check sum of diagonals
+        if var_i == var_j:
+            list_list_index.append(
+                [(i*self.N + i) for i in xrange(self.N)])
+        if var_i == self.N-1 - var_j:
+            list_list_index.append(
+                [((self.N-1) * (self.N-i)) for i in xrange(self.N)])
 
-        if num != self.sum:
-            count += 1
+        for list_index in list_list_index:
+            list_nb = [self.vars[i] for i in list_index]
+            diff = abs(self.sum - sum(list_nb))
+            count += 1 * diff
 
-        num = 0
-        for i in [(var_i + self.N*j) for j in xrange(self.N)]:
-            num += self.vars[i]
-
-        if num != self.sum:
-            count += 1
+            if max_count is not None and count - 1 > max_count:
+                break
 
         return count
 
@@ -85,7 +76,7 @@ class MagicSquareManager(StateManager):
         list_states = []
 
         max_count = var["constraints"]
-        for num in xrange(1, self.sum - 1):
+        for num in xrange(1, self.N * self.N):
             self.vars[var["id"]] = num
             nb_constraints = self.count_constraint_violated(
                 var["id"], max_count)
@@ -110,12 +101,12 @@ class MagicSquareManager(StateManager):
         """
 
         _str = "SUM = %d\n" % self.sum
-        _str += "-" * (8 * self.N) + "\n"
+        _str += "-" * (6 * self.N) + "\n"
         for i in xrange(self.N):
             for j in xrange(self.N):
-                _str += " %5d |" % self.vars[i*self.N + j]
+                _str += " %3d |" % self.vars[i*self.N + j]
 
             _str += "\n"
-        _str += "-" * (8 * self.N)
+        _str += "-" * (6 * self.N)
 
         return _str
