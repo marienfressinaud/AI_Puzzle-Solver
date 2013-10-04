@@ -102,7 +102,7 @@ class StateManager(object):
 
         for c in self.constraints:
             c_is_ok = c.check(state)
-            count += 1 * (not c_is_ok)
+            count += (1*c.coeff_count) * (not c_is_ok)
 
             if max_count is not None and count - 1 > max_count:
                break

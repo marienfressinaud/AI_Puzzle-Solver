@@ -17,6 +17,7 @@ class Constraint(object):
         self.function = function
         self.var1 = var1
         self.var2 = var2
+        self.coeff_count = 1
 
     def check(self, state):
         return self.function(state, self.var1, self.var2)
@@ -26,6 +27,7 @@ class MustBeDifferentConstraint(Constraint):
 
     def __init__(self, list_vars):
         self.list_vars = list_vars
+        self.coeff_count = 1
 
     def check(self, state):
         var_exist = []
@@ -43,10 +45,11 @@ class SumEqualsConstraint(Constraint):
     def __init__(self, _sum, list_vars):
         self.sum = _sum
         self.list_vars = list_vars
-        self.diff = -1
+        self.coeff_count = 1
 
     def check(self, state):
         list_nb = [state[var] for var in self.list_vars]
-        self.diff = abs(self.sum - sum(list_nb))
+        diff = abs(self.sum - sum(list_nb))
+        self.coeff_count = diff
 
-        return self.diff == 0
+        return diff == 0
