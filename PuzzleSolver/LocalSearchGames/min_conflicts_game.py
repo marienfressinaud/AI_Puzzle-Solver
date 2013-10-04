@@ -3,10 +3,6 @@
 from random import randint
 
 from game import Game
-from kqueens_manager import KQueensManager
-from color_graph_manager import ColorGraphManager
-from magic_square_manager import MagicSquareManager
-from graph_output import draw_graph
 
 
 class MinConflictsGame(Game):
@@ -74,57 +70,3 @@ class MinConflictsGame(Game):
             state = self.get_fewest_conflict_state(conflict_var)
 
             self.state_manager.upstate(state)
-
-
-class KQueensMC(MinConflictsGame):
-    """
-    K-Queens game based on min conflicts algorithm
-    """
-
-    def __init__(self):
-        super(KQueensMC, self).__init__()
-
-        self.state_manager = KQueensManager()
-
-    def run(self):
-        print self.state_manager
-
-        super(KQueensMC, self).run()
-
-        print self.state_manager
-
-
-class GraphColorMC(MinConflictsGame):
-    """
-    Graph Color game based on min conflicts algorithm
-    """
-
-    def __init__(self):
-        super(GraphColorMC, self).__init__()
-
-        self.state_manager = ColorGraphManager()
-
-    def run(self):
-        draw_graph(self.state_manager, "graph_start.dot")
-
-        super(GraphColorMC, self).run()
-
-        draw_graph(self.state_manager, "graph_end.dot")
-
-
-class MagicSquareMC(MinConflictsGame):
-    """
-    Magic Square game based on min conflicts algorithm
-    """
-
-    def __init__(self):
-        super(MagicSquareMC, self).__init__()
-
-        self.state_manager = MagicSquareManager()
-
-    def run(self):
-        print self.state_manager
-
-        super(MagicSquareMC, self).run()
-
-        print self.state_manager

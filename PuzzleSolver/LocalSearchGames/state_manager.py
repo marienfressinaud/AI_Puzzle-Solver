@@ -57,11 +57,7 @@ class StateManager(object):
         Return True if all variables are constraint violation free
         """
 
-        for var in self.state:
-            if self.count_constraint_violated(self.state, var) > 0:
-                return False
-
-        return True
+        return self.count_constraint_violated(self.state) <= 0
 
     def generate_random_states(self, n):
         """
@@ -93,7 +89,7 @@ class StateManager(object):
 
         return list_states
 
-    def count_constraint_violated(self, state, var_id, max_count=None):
+    def count_constraint_violated(self, state, var_id=None, max_count=None):
         """
         Counts number of constraint violations for a given variable
         """
@@ -101,7 +97,7 @@ class StateManager(object):
         count = 0
 
         for c in self.constraints:
-            c_is_ok = c.check(state)
+            c_is_ok = c.check(state, var_id)
             count += (1*c.coeff_count) * (not c_is_ok)
 
             if max_count is not None and count - 1 > max_count:

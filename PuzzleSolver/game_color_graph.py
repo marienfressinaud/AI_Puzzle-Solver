@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from state_manager import StateManager
-from game_levels import GameLevel
-from constraints import MustBeDifferentConstraint
+from LocalSearchGames.min_conflicts_game import MinConflictsGame
+from LocalSearchGames.simulated_annealing_game import SimulatedAnnealingGame
+from LocalSearchGames.state_manager import StateManager
+from LocalSearchGames.game_levels import GameLevel
+from LocalSearchGames.constraints import MustBeDifferentConstraint
+from graph_output import draw_graph
 
 
 class ColorGraphManager(StateManager):
@@ -51,3 +54,39 @@ class ColorGraphManager(StateManager):
             self.filename = "graph-color-3.txt"
 
         self.__build_graph()
+
+
+class GraphColorMC(MinConflictsGame):
+    """
+    Graph Color game based on min conflicts algorithm
+    """
+
+    def __init__(self):
+        super(GraphColorMC, self).__init__()
+
+        self.state_manager = ColorGraphManager()
+
+    def run(self):
+        draw_graph(self.state_manager, "graph_start.dot")
+
+        super(GraphColorMC, self).run()
+
+        draw_graph(self.state_manager, "graph_end.dot")
+
+
+class GraphColorSA(SimulatedAnnealingGame):
+    """
+    Graph color game based on simulated annealing algorithm
+    """
+
+    def __init__(self):
+        super(GraphColorSA, self).__init__()
+
+        self.state_manager = ColorGraphManager()
+
+    def run(self):
+        draw_graph(self.state_manager, "graph_start.dot")
+
+        super(GraphColorSA, self).run()
+
+        draw_graph(self.state_manager, "graph_end.dot")

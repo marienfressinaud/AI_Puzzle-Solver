@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from min_conflicts_games import KQueensMC, GraphColorMC, MagicSquareMC
-from simulated_annealing_games import KQueensSA, GraphColorSA, MagicSquareSA
+from game_color_graph import GraphColorMC, GraphColorSA
+from game_kqueens import KQueensMC, KQueensSA
+from game_magic_square import MagicSquareMC, MagicSquareSA
 
 
 class Factory():

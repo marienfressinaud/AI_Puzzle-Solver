@@ -4,10 +4,6 @@ from math import exp
 from random import random, choice
 
 from game import Game
-from kqueens_manager import KQueensManager
-from color_graph_manager import ColorGraphManager
-from magic_square_manager import MagicSquareManager
-from graph_output import draw_graph
 
 
 class SimulatedAnnealingGame(Game):
@@ -89,57 +85,3 @@ class SimulatedAnnealingGame(Game):
                 self.state_manager.upstate(choice(neighbors))
 
             self.lower_temperature()
-
-
-class KQueensSA(SimulatedAnnealingGame):
-    """
-    K-Queens game based on simulated annealing algorithm
-    """
-
-    def __init__(self):
-        super(KQueensSA, self).__init__()
-
-        self.state_manager = KQueensManager()
-
-    def run(self):
-        print self.state_manager
-
-        super(KQueensSA, self).run()
-
-        print self.state_manager
-
-
-class GraphColorSA(SimulatedAnnealingGame):
-    """
-    Graph color game based on simulated annealing algorithm
-    """
-
-    def __init__(self):
-        super(GraphColorSA, self).__init__()
-
-        self.state_manager = ColorGraphManager()
-
-    def run(self):
-        draw_graph(self.state_manager, "graph_start.dot")
-
-        super(GraphColorSA, self).run()
-
-        draw_graph(self.state_manager, "graph_end.dot")
-
-
-class MagicSquareSA(SimulatedAnnealingGame):
-    """
-    Magic Square game based on simulated annealing algorithm
-    """
-
-    def __init__(self):
-        super(MagicSquareSA, self).__init__()
-
-        self.state_manager = MagicSquareManager()
-
-    def run(self):
-        print self.state_manager
-
-        super(MagicSquareSA, self).run()
-
-        print self.state_manager

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from state_manager import StateManager
-from game_levels import GameLevel
-from constraints import SumEqualsConstraint
+from LocalSearchGames.min_conflicts_game import MinConflictsGame
+from LocalSearchGames.simulated_annealing_game import SimulatedAnnealingGame
+from LocalSearchGames.state_manager import StateManager
+from LocalSearchGames.game_levels import GameLevel
+from LocalSearchGames.constraints import SumEqualsConstraint
 
 
 class MagicSquareManager(StateManager):
@@ -66,3 +68,39 @@ class MagicSquareManager(StateManager):
         _str += "-" * (6 * self.N)
 
         return _str
+
+
+class MagicSquareMC(MinConflictsGame):
+    """
+    Magic Square game based on min conflicts algorithm
+    """
+
+    def __init__(self):
+        super(MagicSquareMC, self).__init__()
+
+        self.state_manager = MagicSquareManager()
+
+    def run(self):
+        print self.state_manager
+
+        super(MagicSquareMC, self).run()
+
+        print self.state_manager
+
+
+class MagicSquareSA(SimulatedAnnealingGame):
+    """
+    Magic Square game based on simulated annealing algorithm
+    """
+
+    def __init__(self):
+        super(MagicSquareSA, self).__init__()
+
+        self.state_manager = MagicSquareManager()
+
+    def run(self):
+        print self.state_manager
+
+        super(MagicSquareSA, self).run()
+
+        print self.state_manager

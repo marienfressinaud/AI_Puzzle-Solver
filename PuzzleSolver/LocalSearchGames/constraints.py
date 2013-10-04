@@ -1,17 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-def queen_not_under_attack(state, var1, var2):
-    queen_i = (var1, state[var1])
-    queen_j = (var2, state[var2])
-
-    return queen_j[1] not in (
-        queen_i[1],
-        queen_i[1] + abs(queen_i[0] - queen_j[0]),
-        queen_i[1] - abs(queen_i[0] - queen_j[0])
-    )
-
-
 class Constraint(object):
 
     def __init__(self, function, var1, var2):
@@ -20,8 +9,12 @@ class Constraint(object):
         self.var2 = var2
         self.coeff_count = 1
 
-    def check(self, state):
-        return self.function(state, self.var1, self.var2)
+    def check(self, state, var_involved=None):
+        if var_involved is None or \
+                var_involved == self.var1 or \
+                var_involved == self.var2:
+            return self.function(state, self.var1, self.var2)
+        return True
 
 
 class MustBeDifferentConstraint(Constraint):
@@ -30,14 +23,14 @@ class MustBeDifferentConstraint(Constraint):
         self.list_vars = list_vars
         self.coeff_count = 1
 
-    def check(self, state):
-        var_exist = []
-        for var in self.list_vars:
-            if state[var] in var_exist:
-                return False
-            else:
-                var_exist.append(state[var])
-
+    def check(self, state, var_involved=None):
+        if var_involved is None or var_involved in self.list_vars:
+            var_exist = []
+            for var in self.list_vars:
+                if state[var] in var_exist:
+                    return False
+                else:
+                    var_exist.append(state[var])
         return True
 
 
@@ -48,9 +41,11 @@ class SumEqualsConstraint(Constraint):
         self.list_vars = list_vars
         self.coeff_count = 1
 
-    def check(self, state):
-        list_nb = [state[var] for var in self.list_vars]
-        diff = abs(self.sum - sum(list_nb))
-        self.coeff_count = diff
+    def check(self, state, var_involved=None):
+        if var_involved is None or var_involved in self.list_vars:
+            list_nb = [state[var] for var in self.list_vars]
+            diff = abs(self.sum - sum(list_nb))
+            self.coeff_count = diff
 
-        return diff == 0
+            return diff == 0
+        return True
