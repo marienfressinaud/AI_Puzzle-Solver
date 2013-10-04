@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from time import time
 from math import exp
 from random import random, choice
 
@@ -60,6 +61,7 @@ class SimulatedAnnealingGame(Game):
         """
 
         self.show_state_manager()
+        self.date_begin = time()
 
         eval_state = self.evaluate(self.state_manager.state)
         self.number_steps = 0

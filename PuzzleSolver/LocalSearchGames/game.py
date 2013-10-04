@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from time import time
+
 from state_manager import StateManager
 from game_levels import GameLevel
 
@@ -16,6 +18,8 @@ class Game(object):
         self.level = None
         self.max_steps = 0
         self.number_steps = 0
+        self.max_time = 120
+        self.date_begin = 0
         self.verbose = False
 
     def generate(self, level):
@@ -53,7 +57,14 @@ class Game(object):
         """
 
         return self.state_manager.is_optimal() or \
-            self.number_steps >= self.max_steps
+            self.outofsteps() or self.outoftime()
+
+    def outofsteps(self):
+        return self.number_steps >= self.max_steps
+
+    def outoftime(self):
+        return self.date_begin > 0 and \
+            time() > (self.date_begin + self.max_time)
 
     def show_state_manager(self):
         if self.verbose:

@@ -20,8 +20,10 @@ def exec_game(game_type, local_search_type, level, verbosity):
     game.generate(level)
     game.run()
 
-    if game.number_steps >= game.max_steps:
-        ui.show_non_perfect_game(game.number_steps)
+    if game.outofsteps():
+        ui.show_outofsteps_game(game.number_steps)
+    elif game.outoftime():
+        ui.show_outoftime_game(game.max_time)
     else:
         ui.show_perfect_game(game.number_steps)
 

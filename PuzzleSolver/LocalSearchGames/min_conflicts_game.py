@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from time import time
 from random import randint
 
 from game import Game
@@ -63,6 +64,7 @@ class MinConflictsGame(Game):
         """
 
         self.show_state_manager()
+        self.date_begin = time()
 
         self.number_steps = 0
         while not self.is_terminated():
