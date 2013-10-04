@@ -9,12 +9,13 @@ MIN_LOOPS = 1
 MAX_LOOPS = 2000
 
 
-def exec_game(game_type, local_search_type, level):
+def exec_game(game_type, local_search_type, level, verbosity):
     """
     Function which runs a game according to the current configuration
     """
 
     game = Factory.build(game_type, local_search_type)
+    game.verbose = (verbosity == "on")
 
     game.generate(level)
     game.run()
@@ -31,7 +32,9 @@ def run_games(game, env):
     """
 
     for i in xrange(env["nb_loops"]):
-        exec_game(game, env["local_search_type"], env["level"])
+        exec_game(
+            game, env["local_search_type"], env["level"], env["verbosity"]
+        )
 
 
 def __set_env(env, var, val):
@@ -42,7 +45,8 @@ def __set_env(env, var, val):
     check_values = {
         "level": ["easy", "medium", "hard"],
         "local_search_type": ["mc", "sa"],
-        "nb_loops": xrange(MIN_LOOPS, MAX_LOOPS)
+        "nb_loops": xrange(MIN_LOOPS, MAX_LOOPS),
+        "verbosity": ["on", "off"]
     }
 
     if var in check_values and val in check_values[var]:
@@ -61,7 +65,8 @@ def exec_choice(choice, env):
         "n": lambda env, *args: __set_env(
             env, "nb_loops", ui.ask_number_loops(MIN_LOOPS, MAX_LOOPS)
         ),
-        "s": lambda env, *args: ui.show_configuration(env)
+        "s": lambda env, *args: ui.show_configuration(env),
+        "v": lambda env, *args: __set_env(env, "verbosity", args[0])
     }
 
     if choice[0] in actions:
@@ -81,7 +86,8 @@ def main():
     env = {
         "level": "easy",
         "local_search_type": "mc",
-        "nb_loops": 5
+        "nb_loops": 5,
+        "verbosity": False
     }
 
     while choice != "q":
@@ -92,6 +98,7 @@ def main():
             "l easy", "l medium", "l hard",
             "t sa", "t mc",
             "n", "s",
+            "v on", "v off",
             "q"
         )).lower()
 

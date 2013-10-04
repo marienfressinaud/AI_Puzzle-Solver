@@ -81,13 +81,6 @@ class KQueensMC(MinConflictsGame):
 
         self.state_manager = KQueensManager()
 
-    def run(self):
-        print self.state_manager
-
-        super(KQueensMC, self).run()
-
-        print self.state_manager
-
 
 class KQueensSA(SimulatedAnnealingGame):
     """
@@ -98,10 +91,3 @@ class KQueensSA(SimulatedAnnealingGame):
         super(KQueensSA, self).__init__()
 
         self.state_manager = KQueensManager()
-
-    def run(self):
-        print self.state_manager
-
-        super(KQueensSA, self).run()
-
-        print self.state_manager

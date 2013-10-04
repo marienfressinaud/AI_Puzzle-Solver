@@ -59,6 +59,8 @@ class SimulatedAnnealingGame(Game):
         Runs simulated annealing algorithm
         """
 
+        self.show_state_manager()
+
         eval_state = self.evaluate(self.state_manager.state)
         self.number_steps = 0
 
@@ -85,3 +87,5 @@ class SimulatedAnnealingGame(Game):
                 self.state_manager.upstate(choice(neighbors))
 
             self.lower_temperature()
+
+        self.show_state_manager()

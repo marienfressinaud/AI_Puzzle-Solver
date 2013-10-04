@@ -62,6 +62,8 @@ class MinConflictsGame(Game):
         Runs min conflicts algorithm
         """
 
+        self.show_state_manager()
+
         self.number_steps = 0
         while not self.is_terminated():
             self.number_steps += 1
@@ -70,3 +72,5 @@ class MinConflictsGame(Game):
             state = self.get_fewest_conflict_state(conflict_var)
 
             self.state_manager.upstate(state)
+
+        self.show_state_manager()

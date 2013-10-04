@@ -61,6 +61,7 @@ def show_menu():
 =   Local Search (T)ype SA | MC
 =   (N)umber of loops
 =   (S)ee configuration
+=   (V)erbosity on | off
 =   (Q)uit
     """
 
@@ -97,18 +98,19 @@ def show_configuration(env):
 
     level = env["level"]
     nb_loops = env["nb_loops"]
+    verbosity = env["verbosity"]
+
     local_search_type = ""
     if env["local_search_type"] == "mc":
         local_search_type = "Min Conflicts"
     elif env["local_search_type"] == "sa":
         local_search_type = "Simulated Annealing"
-    else:
-        assert(0)
 
     print """Local search type: %s
 Level: %s
-Number of loops: %d""" \
-    % (local_search_type, level, nb_loops)
+Number of loops: %d
+Verbosity %s""" \
+    % (local_search_type, level, nb_loops, verbosity)
 
 
 def show_non_perfect_game(nb_steps):

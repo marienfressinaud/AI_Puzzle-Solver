@@ -32,4 +32,4 @@ def draw_graph(state_manager, filename):
         e = c.list_vars
         graph.add_edge(e[0], e[1])
 
-    graph.write("data/%s" % filename)
+    graph.write(filename)

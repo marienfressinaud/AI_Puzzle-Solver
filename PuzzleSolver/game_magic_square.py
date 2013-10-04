@@ -80,13 +80,6 @@ class MagicSquareMC(MinConflictsGame):
 
         self.state_manager = MagicSquareManager()
 
-    def run(self):
-        print self.state_manager
-
-        super(MagicSquareMC, self).run()
-
-        print self.state_manager
-
 
 class MagicSquareSA(SimulatedAnnealingGame):
     """
@@ -97,10 +90,3 @@ class MagicSquareSA(SimulatedAnnealingGame):
         super(MagicSquareSA, self).__init__()
 
         self.state_manager = MagicSquareManager()
-
-    def run(self):
-        print self.state_manager
-
-        super(MagicSquareSA, self).run()
-
-        print self.state_manager

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from sys import exit
+
 from LocalSearchGames.min_conflicts_game import MinConflictsGame
 from LocalSearchGames.simulated_annealing_game import SimulatedAnnealingGame
 from LocalSearchGames.state_manager import StateManager
@@ -16,6 +18,30 @@ class ColorGraphManager(StateManager):
     def __init__(self):
         super(ColorGraphManager, self).__init__()
 
+    def __read_multiplicities(self, file):
+        try:
+            return (int(x) for x in file.readline().split())
+        except ValueError:
+            print "Oops, %s seems to be an invalid file" % self.filename
+            exit(-1)
+
+    def __read_node(self, file):
+        node = [float(x) for x in file.readline().split()]
+        if len(node) == 3:
+            node[0] = int(node[0])
+            return node
+        else:
+            print "Oops, %s seems to be an invalid file" % self.filename
+            exit(-1)
+
+    def __read_edge(self, file):
+        edge = [int(x) for x in file.readline().split()]
+        if len(edge) == 2:
+            return edge
+        else:
+            print "Oops, %s seems to be an invalid file" % self.filename
+            exit(-1)
+
     def __build_graph(self):
         """
         Read file with the given filename (into data/ directory) and generates
@@ -25,21 +51,25 @@ class ColorGraphManager(StateManager):
         """
 
         # TODO: check file format and errors
-        f = open("data/%s" % self.filename)
+        try:
+            f = open("data/%s" % self.filename)
+        except IOError:
+            print "Oops, %s doesn't exist in data directory" % self.filename
+            exit(-1)
 
-        self.nb_v, self.nb_e = (int(x) for x in f.readline().split())
+        self.nb_v, self.nb_e = self.__read_multiplicities(f)
 
         self.vars = {}
         for i in xrange(self.nb_v):
-            v = [float(x) for x in f.readline().split()]
-            self.vars[int(v[0])] = xrange(1, self.K + 1)
-            #self.coords[int(v[0])] = {"x": v[1], "y": v[2]}
+            node = self.__read_node(f)
+            self.vars[node[0]] = xrange(1, self.K + 1)
 
         self.constraints = []
         for i in xrange(self.nb_e):
-            e = [int(x) for x in f.readline().split()]
+            edge = self.__read_edge(f)
             self.constraints.append(
-                MustBeDifferentConstraint([e[0], e[1]]))
+                MustBeDifferentConstraint([edge[0], edge[1]])
+            )
 
         f.close()
 
@@ -55,6 +85,20 @@ class ColorGraphManager(StateManager):
 
         self.__build_graph()
 
+    nb_print = 0
+
+    def __str__(self):
+        """
+        Returns a representation of the current state into a file
+        """
+
+        filename = "data/graph_%d.dot" % ColorGraphManager.nb_print
+        draw_graph(self, filename)
+
+        ColorGraphManager.nb_print += 1
+
+        return "Current state has been saved into %s" % filename
+
 
 class GraphColorMC(MinConflictsGame):
     """
@@ -66,13 +110,6 @@ class GraphColorMC(MinConflictsGame):
 
         self.state_manager = ColorGraphManager()
 
-    def run(self):
-        draw_graph(self.state_manager, "graph_start.dot")
-
-        super(GraphColorMC, self).run()
-
-        draw_graph(self.state_manager, "graph_end.dot")
-
 
 class GraphColorSA(SimulatedAnnealingGame):
     """
@@ -83,10 +120,3 @@ class GraphColorSA(SimulatedAnnealingGame):
         super(GraphColorSA, self).__init__()
 
         self.state_manager = ColorGraphManager()
-
-    def run(self):
-        draw_graph(self.state_manager, "graph_start.dot")
-
-        super(GraphColorSA, self).run()
-
-        draw_graph(self.state_manager, "graph_end.dot")

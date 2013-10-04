@@ -16,6 +16,7 @@ class Game(object):
         self.level = None
         self.max_steps = 0
         self.number_steps = 0
+        self.verbose = False
 
     def generate(self, level):
         """
@@ -53,3 +54,7 @@ class Game(object):
 
         return self.state_manager.is_optimal() or \
             self.number_steps >= self.max_steps
+
+    def show_state_manager(self):
+        if self.verbose:
+            print self.state_manager
