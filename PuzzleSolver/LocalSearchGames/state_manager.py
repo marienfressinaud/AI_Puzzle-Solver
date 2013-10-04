@@ -10,17 +10,15 @@ class StateManager(object):
     """
 
     def __init__(self):
-        self.exists = False
         self.vars = {}
         self.constraints = []
 
     def build_new_game(self, level):
         """
         Generates a new game.
-        Other methods must not do anything if not self.exists
         """
 
-        self.exists = True
+        pass
 
     def get_random_variable(self):
         """

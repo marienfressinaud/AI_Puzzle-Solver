@@ -23,9 +23,6 @@ class KQueensManager(StateManager):
         If a position is not in self.queens, there is no queen here
         """
 
-        if not self.exists:
-            return
-
         self.vars = {}
         for i in xrange(self.K):
             j = randint(0, self.K - 1)
@@ -48,13 +45,10 @@ class KQueensManager(StateManager):
         self.__place_all_queens()
 
     def count_constraint_violated(self, queen_i, max_count=None):
-        count = 0
+        # we begin at -1 because queen_i is in conflict with itself
+        count = -1
 
         for queen_j in self.vars:
-            if queen_i == queen_j:
-                # don't compare a queen with itself (herself?)
-                continue
-
             list_col = (
                 queen_i[1],
                 queen_i[1] + abs(queen_i[0] - queen_j[0]),
@@ -65,7 +59,7 @@ class KQueensManager(StateManager):
                 count += 1
 
             if max_count is not None and count - 1 > max_count:
-                return count
+                break
 
         return count
 
@@ -121,16 +115,15 @@ class KQueensManager(StateManager):
 
         _str = ""
 
-        if self.exists:
-            _str = "-" * (4 * self.K) + "\n"
-            for i in xrange(self.K):
-                for j in xrange(self.K):
-                    if (i, j) in self.vars:
-                        _str += " Q |"
-                    else:
-                        _str += "   |"
+        _str = "-" * (4 * self.K) + "\n"
+        for i in xrange(self.K):
+            for j in xrange(self.K):
+                if (i, j) in self.vars:
+                    _str += " Q |"
+                else:
+                    _str += "   |"
 
-                _str += "\n"
-            _str += "-" * (4 * self.K)
+            _str += "\n"
+        _str += "-" * (4 * self.K)
 
         return _str

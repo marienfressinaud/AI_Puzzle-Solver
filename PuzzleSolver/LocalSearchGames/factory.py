@@ -16,19 +16,26 @@ class Factory():
         to game_type and local_search_type
         """
 
+        assert(local_search_type == "mc" or local_search_type == "sa")
+        assert(
+            game_type == "k-queens" or
+            game_type == "graph-coloring" or
+            game_type == "TODO"
+        )
+
         games = {
             "mc": {
-                "k-queens": KQueensMC(),
-                "graph-coloring": GraphColorMC(),
+                "k-queens": KQueensMC,
+                "graph-coloring": GraphColorMC,
                 "TODO": None
             },
             "sa": {
-                "k-queens": KQueensSA(),
-                "graph-coloring": GraphColorSA(),
+                "k-queens": KQueensSA,
+                "graph-coloring": GraphColorSA,
                 "TODO": None
             }
         }
 
-        return games[local_search_type][game_type]
+        return games[local_search_type][game_type]()
 
     build = classmethod(build)

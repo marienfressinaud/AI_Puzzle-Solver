@@ -37,9 +37,7 @@ class MinConflictsGame(Game):
 
         best_vars = [selected_var]
         for var in self.state_manager.list_next_states(selected_var):
-            if var["val"] == selected_var["val"]:
-                # don't compare the current value
-                continue
+            assert(len(best_vars) >= 1)
 
             if var["constraints"] < best_vars[0]["constraints"] or \
                     (best_vars[0]["val"] == selected_var["val"] and
