@@ -105,7 +105,7 @@ class StateManager(object):
             count += (1*c.coeff_count) * (not c_is_ok)
 
             if max_count is not None and count - 1 > max_count:
-               break
+                break
 
         return count
 

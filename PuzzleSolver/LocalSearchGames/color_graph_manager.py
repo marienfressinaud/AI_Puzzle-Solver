@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from random import randint
-
 from state_manager import StateManager
 from game_levels import GameLevel
 from constraints import MustBeDifferentConstraint

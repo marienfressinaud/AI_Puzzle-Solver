@@ -15,6 +15,13 @@ class KQueensManager(StateManager):
 
         self.K = 0
 
+    def __set_constraints(self):
+        self.constraints = []
+        for i in xrange(self.K):
+            for j in xrange(i + 1, self.K):
+                self.constraints.append(
+                    Constraint(queen_not_under_attack, i, j))
+
     def build_new_game(self, level):
         if level == GameLevel.EASY:
             self.K = 4
@@ -28,11 +35,7 @@ class KQueensManager(StateManager):
             # Generation of the domain
             self.vars[i] = xrange(self.K)
 
-        self.constraints = []
-        for i in xrange(self.K):
-            for j in xrange(i + 1, self.K):
-                self.constraints.append(
-                    Constraint(queen_not_under_attack, i, j))
+        self.__set_constraints()
 
     def __str__(self):
         """

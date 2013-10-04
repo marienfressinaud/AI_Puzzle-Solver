@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 def queen_not_under_attack(state, var1, var2):
     queen_i = (var1, state[var1])
     queen_j = (var2, state[var2])
