@@ -77,7 +77,7 @@ def ask_item(list_items):
     return list_items[choice - 1]
 
 
-def show_menu():
+def ask_menu():
     """
     Print game menu
     """
@@ -91,6 +91,15 @@ def show_menu():
 =   (S)ee configuration
 =   (Q)uit
     """
+
+    return ask_choice((
+        "p",
+        "l easy", "l medium", "l hard",
+        "t sa", "t mc",
+        "n", "v on", "v off",
+        "s",
+        "q"
+    )).lower()
 
 
 def ask_number_loops(_min, _max):
@@ -145,6 +154,6 @@ def show_outoftime_game(game, limit):
         % (game, limit)
 
 
-def show_perfect_game(game, nb_steps):
-    print "%s has been resolved in %d steps!" \
-        % (game, nb_steps)
+def show_perfect_game(game, nb_steps, running_time):
+    print "%s has been resolved in %d steps and %.2f seconds!" \
+        % (game, nb_steps, running_time)

@@ -40,9 +40,6 @@ class StateManager(object):
     def get_random_conflict_variable(self):
         """
         Returns a random variable which involves in at least one conflict
-
-        TODO (K-Queens case) may not be efficient when K is really big
-             and no so many constraint violated variables
         """
 
         var = None
@@ -68,8 +65,14 @@ class StateManager(object):
 
         for i in xrange(n):
             var = self.get_random_variable()
-            states = self.list_next_states(var)
-            list_states.append(choice(states))
+            domain = self.vars[var]
+            val = choice(domain)
+            while val == self.state[var]:
+                val = choice(domain)
+
+            new_state = self.state.copy()
+            new_state[var] = val
+            list_states.append(new_state)
 
         return list_states
 
@@ -78,16 +81,13 @@ class StateManager(object):
         Generates different states for a given variable
         """
 
-        list_states = []
         for val in self.vars[var_id]:
             # We get all values of the domain
             # if val is different than the current one, we create a new state
             if val != self.state[var_id]:
                 new_state = self.state.copy()
                 new_state[var_id] = val
-                list_states.append(new_state)
-
-        return list_states
+                yield new_state
 
     def count_constraint_violated(self, state, var_id=None, max_count=None):
         """

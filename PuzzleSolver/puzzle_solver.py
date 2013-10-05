@@ -1,6 +1,8 @@
 #!/bin/env python2
 # -*- coding: utf-8 -*-
 
+from time import time
+
 from factory import Factory
 import ui
 
@@ -25,7 +27,8 @@ def exec_game(game_type, local_search_type, level, verbosity):
     elif game.outoftime():
         ui.show_outoftime_game(game_type, game.max_time)
     else:
-        ui.show_perfect_game(game_type, game.number_steps)
+        running_time = time() - game.date_begin
+        ui.show_perfect_game(game_type, game.number_steps, running_time)
 
 
 def run_games(game, env):
@@ -95,16 +98,7 @@ def main():
     }
 
     while choice != "q":
-        ui.show_menu()
-
-        choice = ui.ask_choice((
-            "p",
-            "l easy", "l medium", "l hard",
-            "t sa", "t mc",
-            "n", "v on", "v off",
-            "s",
-            "q"
-        )).lower()
+        choice = ui.ask_menu()
 
         exec_choice(choice.split(), env)
 

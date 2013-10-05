@@ -40,7 +40,7 @@ class MinConflictsGame(Game):
         next_states = self.state_manager.list_next_states(var_id)
         for state in next_states:
             cur_constraint = self.state_manager.count_constraint_violated(
-                state, var_id) - 1
+                state, var_id, best_constraint) - 1
 
             if cur_constraint < best_constraint or \
                     (best_states[0] == self.state_manager.state and
