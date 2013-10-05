@@ -25,9 +25,10 @@ def exec_game(game_type, env):
     verbosity = env["verbosity"]
 
     game = Factory.build(game_type, local_search_type)
+    game.max_time = time_limit
     game.verbose = (verbosity == "on")
 
-    game.generate(mode, time_limit)
+    game.generate(mode)
     game.run()
 
     if game.outofsteps():

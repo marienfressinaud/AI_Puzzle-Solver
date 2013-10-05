@@ -65,7 +65,6 @@ class SimulatedAnnealingGame(Game):
         eval_state = self.evaluate(self.state_manager.state)
         self.number_steps = 0
 
-        # while not F(P) ≥ F_target
         while not self.is_terminated():
             self.number_steps += 1
 

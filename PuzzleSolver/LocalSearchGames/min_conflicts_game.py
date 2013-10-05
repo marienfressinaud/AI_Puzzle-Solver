@@ -20,17 +20,10 @@ class MinConflictsGame(Game):
     def __init__(self):
         super(MinConflictsGame, self).__init__()
 
-    def get_conflict_variable(self):
-        """
-        Choose a random variable which involved in at least one conflict
-        """
-
-        return self.state_manager.get_random_conflict_variable()
-
     def get_fewest_conflict_state(self, var_id):
         """
-        Choose a new state we can assign to selected_var in order to produce
-        less conflicts
+        Choose a new state where our selected var produce less conflicts
+        If there are several possible states, we choose one randomly
         """
 
         best_states = [self.state_manager.state]
@@ -69,7 +62,9 @@ class MinConflictsGame(Game):
         while not self.is_terminated():
             self.number_steps += 1
 
-            conflict_var = self.get_conflict_variable()
+            # we get a random *conflicted* variable and we modify its value
+            # in order to minimize the number of conflicts
+            conflict_var = self.state_manager.get_random_conflict_variable()
             state = self.get_fewest_conflict_state(conflict_var)
 
             self.state_manager.upstate(state)
