@@ -24,6 +24,7 @@ class ColorGraphManager(StateManager):
             return (int(x) for x in file.readline().split())
         except ValueError:
             show_invalid_file(self.filename)
+            file.close()
             exit(-1)
 
     def __read_node(self, file):
@@ -33,6 +34,7 @@ class ColorGraphManager(StateManager):
             return node
         else:
             show_invalid_file(self.filename)
+            file.close()
             exit(-1)
 
     def __read_edge(self, file):
@@ -41,6 +43,7 @@ class ColorGraphManager(StateManager):
             return edge
         else:
             show_invalid_file(self.filename)
+            file.close()
             exit(-1)
 
     def __build_graph(self):

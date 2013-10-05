@@ -21,11 +21,11 @@ def exec_game(game_type, local_search_type, level, verbosity):
     game.run()
 
     if game.outofsteps():
-        ui.show_outofsteps_game(game.number_steps)
+        ui.show_outofsteps_game(game_type, game.number_steps)
     elif game.outoftime():
-        ui.show_outoftime_game(game.max_time)
+        ui.show_outoftime_game(game_type, game.max_time)
     else:
-        ui.show_perfect_game(game.number_steps)
+        ui.show_perfect_game(game_type, game.number_steps)
 
 
 def run_games(game, env):
@@ -60,8 +60,10 @@ def exec_choice(choice, env):
     Executes a command
     """
 
+    games = Factory.list_games()
+
     actions = {
-        "p": lambda env, *args: run_games(ui.ask_game(), env),
+        "p": lambda env, *args: run_games(ui.ask_item(games), env),
         "l": lambda env, *args: __set_env(env, "level", args[0]),
         "t": lambda env, *args: __set_env(env, "local_search_type", args[0]),
         "n": lambda env, *args: __set_env(
@@ -89,7 +91,7 @@ def main():
         "level": "easy",
         "local_search_type": "mc",
         "nb_loops": 5,
-        "verbosity": False
+        "verbosity": "off"
     }
 
     while choice != "q":
@@ -99,8 +101,8 @@ def main():
             "p",
             "l easy", "l medium", "l hard",
             "t sa", "t mc",
-            "n", "s",
-            "v on", "v off",
+            "n", "v on", "v off",
+            "s",
             "q"
         )).lower()
 

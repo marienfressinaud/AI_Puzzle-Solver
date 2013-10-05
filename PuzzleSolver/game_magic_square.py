@@ -5,6 +5,7 @@ from LocalSearchGames.simulated_annealing_game import SimulatedAnnealingGame
 from LocalSearchGames.state_manager import StateManager
 from LocalSearchGames.game_levels import GameLevel
 from LocalSearchGames.constraints import SumEqualsConstraint
+# from LocalSearchGames.constraints import MustBeDifferentConstraint
 
 
 class MagicSquareManager(StateManager):
@@ -21,6 +22,13 @@ class MagicSquareManager(StateManager):
     def __set_constraints(self):
         self.constraints = []
 
+        # All numbers must be differents
+        # it works... once for ten
+        # self.constraints.append(
+        #     MustBeDifferentConstraint(xrange(self.N * self.N))
+        # )
+
+        # Diagonals constraints
         list_diag1 = [(i*self.N + i) for i in xrange(self.N)]
         list_diag2 = [((self.N-1) * (self.N-i)) for i in xrange(self.N)]
         self.constraints.append(
@@ -28,6 +36,7 @@ class MagicSquareManager(StateManager):
         self.constraints.append(
             SumEqualsConstraint(self.sum, list_diag2))
 
+        # Rows and columns constraints
         for var_id in xrange(self.N):
             list_row = [(var_id*self.N + i) for i in xrange(self.N)]
             list_col = [(var_id + self.N*i) for i in xrange(self.N)]

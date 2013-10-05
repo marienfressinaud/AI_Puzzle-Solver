@@ -1,6 +1,19 @@
 # -*- coding: utf-8 -*-
 
 
+def __build_list_choices(choices):
+    msg = ""
+    if len(choices) <= 3:
+        for c in choices:
+            msg += "%s or " % c.upper()
+        msg = msg[:-4]
+    else:
+        for c in choices:
+            msg += "\n* %s" % c
+
+    return msg
+
+
 def ask_choice(possible_choices=None):
     """
     Permits to get a choice between different choices as input
@@ -16,10 +29,10 @@ def ask_choice(possible_choices=None):
            (choice.lower() in possible_choices):
             ok = True
         else:
-            message = "Invalid choice, choose between "
-            for c in possible_choices:
-                message += c.upper() + " or "
-            print message[:-4]
+            message = "Invalid choice, choose between: %s" \
+                % __build_list_choices(possible_choices)
+
+            print message
 
     return choice
 
@@ -50,6 +63,20 @@ def ask_number(bound_min, bound_max):
     return choice
 
 
+def ask_item(list_items):
+    """
+    Ask for the game we want to play
+    """
+    _str = "\n"
+
+    for i in xrange(len(list_items)):
+        _str += "(%d) %s\n" % (i + 1, list_items[i])
+
+    print _str
+    choice = ask_number(1, len(list_items))
+    return list_items[choice - 1]
+
+
 def show_menu():
     """
     Print game menu
@@ -60,26 +87,10 @@ def show_menu():
 =   (L)evel easy | medium | hard
 =   Local Search (T)ype SA | MC
 =   (N)umber of loops
-=   (S)ee configuration
 =   (V)erbosity on | off
+=   (S)ee configuration
 =   (Q)uit
     """
-
-
-def ask_game():
-    """
-    Ask for the game we want to play
-    """
-
-    print """
-(1) K-Queens
-(2) Graph Coloring
-(3) Magic square
-"""
-    games = ["k-queens", "graph-coloring", "magic-square"]
-
-    choice = ask_number(1, len(games))
-    return games[choice - 1]
 
 
 def ask_number_loops(_min, _max):
@@ -109,8 +120,8 @@ def show_configuration(env):
     print """Local search type: %s
 Level: %s
 Number of loops: %d
-Time limit: %ds
-Verbosity %s""" \
+Time limit: %d seconds
+Verbosity: %s""" \
     % (local_search_type, level, nb_loops, 300, verbosity)
 
 
@@ -122,13 +133,18 @@ def show_invalid_file(filename):
     print "Oops, `%s` seems to be an invalid file" % filename
 
 
-def show_outofsteps_game(nb_steps):
-    print "Out of steps (%d)! We have only a non perfect result..." % nb_steps
+def show_outofsteps_game(game, nb_steps):
+    print ("%s out of steps (%d)! " +
+           "We have only found a non perfect result...") \
+        % (game, nb_steps)
 
 
-def show_outoftime_game(limit):
-    print "Out of time (%ds)! We have only a non perfect result..." % limit
+def show_outoftime_game(game, limit):
+    print ("%s out of time (%d seconds)! " +
+           "We have only found a non perfect result...") \
+        % (game, limit)
 
 
-def show_perfect_game(nb_steps):
-    print "Game has been resolved in %d steps!" % nb_steps
+def show_perfect_game(game, nb_steps):
+    print "%s has been resolved in %d steps!" \
+        % (game, nb_steps)
