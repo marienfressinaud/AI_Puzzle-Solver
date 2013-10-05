@@ -3,16 +3,14 @@
 
 class Constraint(object):
 
-    def __init__(self, function, var1, var2):
+    def __init__(self, list_vars, function):
+        self.list_vars = list_vars
         self.function = function
-        self.var1 = var1
-        self.var2 = var2
         self.coeff_count = 1
 
     def check(self, state, var_involved=None):
-        if var_involved is None or \
-                var_involved == self.var1:
-            return self.function(state, self.var1, self.var2)
+        if var_involved is None or var_involved in self.list_vars:
+            return self.function(state, self.list_vars)
         return True
 
 

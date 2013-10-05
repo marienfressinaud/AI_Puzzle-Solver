@@ -7,7 +7,8 @@ from LocalSearchGames.game_levels import GameLevel
 from LocalSearchGames.constraints import Constraint
 
 
-def queen_not_under_attack(state, var1, var2):
+def queen_not_under_attack(state, list_vars):
+    var1, var2 = list_vars
     queen_i = (var1, state[var1])
     queen_j = (var2, state[var2])
 
@@ -31,11 +32,10 @@ class KQueensManager(StateManager):
     def __set_constraints(self):
         self.constraints = []
         for i in xrange(self.K):
-            for j in xrange(self.K):
-                if i != j:
-                    self.constraints.append(
-                        Constraint(queen_not_under_attack, i, j)
-                    )
+            for j in xrange(i + 1, self.K):
+                self.constraints.append(
+                    Constraint((i, j), queen_not_under_attack)
+                )
 
     def build_new_game(self, level):
         if level == GameLevel.EASY:
