@@ -31,9 +31,11 @@ class KQueensManager(StateManager):
     def __set_constraints(self):
         self.constraints = []
         for i in xrange(self.K):
-            for j in xrange(i + 1, self.K):
-                self.constraints.append(
-                    Constraint(queen_not_under_attack, i, j))
+            for j in xrange(self.K):
+                if i != j:
+                    self.constraints.append(
+                        Constraint(queen_not_under_attack, i, j)
+                    )
 
     def build_new_game(self, level):
         if level == GameLevel.EASY:

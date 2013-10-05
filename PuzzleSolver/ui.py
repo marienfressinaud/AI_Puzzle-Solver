@@ -10,7 +10,7 @@ def ask_choice(possible_choices=None):
     ok = False
 
     while not ok:
-        choice = raw_input("> ")
+        choice = raw_input("> ").strip()
 
         if (possible_choices is None) or \
            (choice.lower() in possible_choices):
@@ -33,7 +33,7 @@ def ask_number(bound_min, bound_max):
     ok = False
 
     while not ok:
-        choice_tmp = raw_input("> ")
+        choice_tmp = raw_input("> ").strip()
 
         try:
             choice = int(choice_tmp)
@@ -109,8 +109,9 @@ def show_configuration(env):
     print """Local search type: %s
 Level: %s
 Number of loops: %d
+Time limit: %ds
 Verbosity %s""" \
-    % (local_search_type, level, nb_loops, verbosity)
+    % (local_search_type, level, nb_loops, 300, verbosity)
 
 
 def show_not_exists_file(filename):

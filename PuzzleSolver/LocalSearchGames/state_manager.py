@@ -95,7 +95,6 @@ class StateManager(object):
         """
 
         count = 0
-
         for c in self.constraints:
             c_is_ok = c.check(state, var_id)
             count += (1*c.coeff_count) * (not c_is_ok)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from time import time
-from random import randint
+from random import choice
 
 from game import Game
 
@@ -37,18 +37,17 @@ class MinConflictsGame(Game):
         best_constraint = self.state_manager.count_constraint_violated(
             self.state_manager.state, var_id)
 
-        for state in self.state_manager.list_next_states(var_id):
-            assert(len(best_states) >= 1)
-
+        next_states = self.state_manager.list_next_states(var_id)
+        for state in next_states:
             cur_constraint = self.state_manager.count_constraint_violated(
-                state, var_id)
+                state, var_id) - 1
 
             if cur_constraint < best_constraint or \
                     (best_states[0] == self.state_manager.state and
                         cur_constraint == best_constraint):
                 # if constraint value is less than previous constraint values
-                # we regenerate list of best states. Same if we never change
-                # best_states (when best_states[0] == self.state_manager.state)
+                # we regenerate list of best states. Same if we have never
+                # changed best_states and current constraint == best constraint
                 best_states = [state]
                 best_constraint = cur_constraint
             elif cur_constraint == best_constraint:
@@ -56,7 +55,7 @@ class MinConflictsGame(Game):
                 # We will selected them randomly after
                 best_states.append(state)
 
-        return best_states[randint(0, len(best_states) - 1)]
+        return choice(best_states)
 
     def run(self):
         """

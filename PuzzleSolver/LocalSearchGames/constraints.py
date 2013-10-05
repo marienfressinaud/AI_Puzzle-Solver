@@ -11,8 +11,7 @@ class Constraint(object):
 
     def check(self, state, var_involved=None):
         if var_involved is None or \
-                var_involved == self.var1 or \
-                var_involved == self.var2:
+                var_involved == self.var1:
             return self.function(state, self.var1, self.var2)
         return True
 
