@@ -105,7 +105,7 @@ def main():
         "mode": "easy",
         "local_search_type": "mc",
         "nb_loops": 5,
-        "time_limit": MIN_TIME_LIMIT,
+        "time_limit": 120,
         "verbosity": "off"
     }
 

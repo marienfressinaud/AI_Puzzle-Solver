@@ -96,8 +96,12 @@ class StateManager(object):
 
         count = 0
         for c in self.constraints:
-            c_is_ok = c.check(state, var_id)
-            count += (1*c.coeff_count) * (not c_is_ok)
+            if var_id is None or c.var_is_involved(var_id):
+                # We MUST use a temporarily variable since c.check
+                # can change c.coeff_count (if you don't understand, try
+                # with Magic Square game)
+                c_is_ok = c.check(state)
+                count += (1*c.coeff_count) * (not c_is_ok)
 
             if max_count is not None and count - 1 > max_count:
                 break

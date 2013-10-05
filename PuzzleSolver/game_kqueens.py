@@ -45,10 +45,7 @@ class KQueensManager(StateManager):
         else:
             self.K = 1000
 
-        self.vars = {}
-        for i in xrange(self.K):
-            # Generation of the domain
-            self.vars[i] = xrange(self.K)
+        self.vars = {i: xrange(self.K) for i in xrange(self.K)}
 
         self.__set_constraints()
 
