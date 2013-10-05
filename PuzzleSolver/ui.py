@@ -84,9 +84,10 @@ def ask_menu():
 
     print """
 =   (P)lay
-=   (L)evel easy | medium | hard
-=   Local Search (T)ype SA | MC
+=   (M)ode easy | medium | hard
+=   (L)ocal Search Type SA | MC
 =   (N)umber of loops
+=   (T)ime limit
 =   (V)erbosity on | off
 =   (S)ee configuration
 =   (Q)uit
@@ -94,9 +95,10 @@ def ask_menu():
 
     return ask_choice((
         "p",
-        "l easy", "l medium", "l hard",
-        "t sa", "t mc",
-        "n", "v on", "v off",
+        "m easy", "m medium", "m hard",
+        "l sa", "l mc",
+        "n", "t",
+        "v on", "v off",
         "s",
         "q"
     )).lower()
@@ -111,13 +113,23 @@ def ask_number_loops(_min, _max):
     return ask_number(_min, _max)
 
 
+def ask_time_limit(_min, _max):
+    """
+    Show a message to ask a time_limit
+    """
+
+    print "Choose a time limit between %d and %d (seconds)" % (_min, _max)
+    return ask_number(_min, _max)
+
+
 def show_configuration(env):
     """
     Print the current configuration
     """
 
-    level = env["level"]
+    mode = env["mode"]
     nb_loops = env["nb_loops"]
+    time_limit = env["time_limit"]
     verbosity = env["verbosity"]
 
     local_search_type = ""
@@ -127,11 +139,11 @@ def show_configuration(env):
         local_search_type = "Simulated Annealing"
 
     print """Local search type: %s
-Level: %s
+Mode: %s
 Number of loops: %d
 Time limit: %d seconds
 Verbosity: %s""" \
-    % (local_search_type, level, nb_loops, 300, verbosity)
+    % (local_search_type, mode, nb_loops, time_limit, verbosity)
 
 
 def show_not_exists_file(filename):

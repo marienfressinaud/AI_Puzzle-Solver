@@ -30,7 +30,7 @@ class SimulatedAnnealingGame(Game):
         """
 
         _eval = (SimulatedAnnealingGame.EVAL_MAX -
-                self.state_manager.count_constraint_violated(state))
+                 self.state_manager.count_constraint_violated(state))
 
         return max(1, _eval)
 

@@ -18,17 +18,18 @@ class Game(object):
         self.level = None
         self.max_steps = 0
         self.number_steps = 0
-        self.max_time = 120
+        self.max_time = 0
         self.date_begin = 0
         self.verbose = False
 
-    def generate(self, level):
+    def generate(self, level, time_limit):
         """
         Generates a new game. Level determines how hard the game will be
         """
 
         assert(level == "easy" or level == "medium" or level == "hard")
 
+        self.max_time = time_limit
         self.max_steps = 10000
         if level == "easy":
             self.level = GameLevel.EASY
@@ -36,8 +37,6 @@ class Game(object):
             self.level = GameLevel.MEDIUM
         else:
             self.level = GameLevel.HARD
-            # not too much steps to keep good performances
-            self.max_steps = 1000
 
         self.state_manager.build_new_game(self.level)
         self.state_manager.generate_game()

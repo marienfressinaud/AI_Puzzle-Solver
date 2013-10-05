@@ -10,16 +10,24 @@ import ui
 MIN_LOOPS = 1
 MAX_LOOPS = 2000
 
+MIN_TIME_LIMIT = 60
+MAX_TIME_LIMIT = 300
 
-def exec_game(game_type, local_search_type, level, verbosity):
+
+def exec_game(game_type, env):
     """
     Function which runs a game according to the current configuration
     """
 
+    local_search_type = env["local_search_type"]
+    mode = env["mode"]
+    time_limit = env["time_limit"]
+    verbosity = env["verbosity"]
+
     game = Factory.build(game_type, local_search_type)
     game.verbose = (verbosity == "on")
 
-    game.generate(level)
+    game.generate(mode, time_limit)
     game.run()
 
     if game.outofsteps():
@@ -37,9 +45,7 @@ def run_games(game, env):
     """
 
     for i in xrange(env["nb_loops"]):
-        exec_game(
-            game, env["local_search_type"], env["level"], env["verbosity"]
-        )
+        exec_game(game, env)
 
 
 def __set_env(env, var, val):
@@ -48,9 +54,10 @@ def __set_env(env, var, val):
     """
 
     check_values = {
-        "level": ["easy", "medium", "hard"],
+        "mode": ["easy", "medium", "hard"],
         "local_search_type": ["mc", "sa"],
         "nb_loops": xrange(MIN_LOOPS, MAX_LOOPS),
+        "time_limit": xrange(MIN_TIME_LIMIT, MAX_TIME_LIMIT),
         "verbosity": ["on", "off"]
     }
 
@@ -67,10 +74,14 @@ def exec_choice(choice, env):
 
     actions = {
         "p": lambda env, *args: run_games(ui.ask_item(games), env),
-        "l": lambda env, *args: __set_env(env, "level", args[0]),
-        "t": lambda env, *args: __set_env(env, "local_search_type", args[0]),
+        "m": lambda env, *args: __set_env(env, "mode", args[0]),
+        "l": lambda env, *args: __set_env(env, "local_search_type", args[0]),
         "n": lambda env, *args: __set_env(
             env, "nb_loops", ui.ask_number_loops(MIN_LOOPS, MAX_LOOPS)
+        ),
+        "t": lambda env, *args: __set_env(
+            env, "time_limit", ui.ask_time_limit(
+                MIN_TIME_LIMIT, MAX_TIME_LIMIT)
         ),
         "s": lambda env, *args: ui.show_configuration(env),
         "v": lambda env, *args: __set_env(env, "verbosity", args[0])
@@ -91,9 +102,10 @@ def main():
 
     choice = None
     env = {
-        "level": "easy",
+        "mode": "easy",
         "local_search_type": "mc",
         "nb_loops": 5,
+        "time_limit": MIN_TIME_LIMIT,
         "verbosity": "off"
     }
 
