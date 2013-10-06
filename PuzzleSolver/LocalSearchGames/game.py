@@ -27,16 +27,16 @@ class Game(object):
         Generates a new game. Level determines how hard the game will be
         """
 
+        levels = {
+            "easy": GameLevel.EASY,
+            "medium": GameLevel.MEDIUM,
+            "hard": GameLevel.HARD
+        }
+
+        assert(level in levels)
+
+        self.level = levels[level]
         self.max_steps = 10000
-
-        assert(level == "easy" or level == "medium" or level == "hard")
-        if level == "easy":
-            self.level = GameLevel.EASY
-        elif level == "medium":
-            self.level = GameLevel.MEDIUM
-        else:
-            self.level = GameLevel.HARD
-
         self.state_manager.build_new_game(self.level)
         self.state_manager.indexing_constraints()
         self.state_manager.generate_game()

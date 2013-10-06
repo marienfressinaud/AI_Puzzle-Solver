@@ -10,8 +10,8 @@ import ui
 MIN_LOOPS = 1
 MAX_LOOPS = 2000
 
-MIN_TIME_LIMIT = 60
-MAX_TIME_LIMIT = 300
+MIN_TIME_LIMIT = 5
+MAX_TIME_LIMIT = 600
 
 
 def exec_game(game_type, env):
@@ -57,8 +57,8 @@ def __set_env(env, var, val):
     check_values = {
         "mode": ["easy", "medium", "hard"],
         "local_search_type": ["mc", "sa"],
-        "nb_loops": xrange(MIN_LOOPS, MAX_LOOPS),
-        "time_limit": xrange(MIN_TIME_LIMIT, MAX_TIME_LIMIT),
+        "nb_loops": xrange(MIN_LOOPS, MAX_LOOPS + 1),
+        "time_limit": xrange(MIN_TIME_LIMIT, MAX_TIME_LIMIT + 1),
         "verbosity": ["on", "off"]
     }
 
