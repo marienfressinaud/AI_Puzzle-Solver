@@ -56,9 +56,8 @@ class MagicSquareManager(StateManager):
 
         self.sum = (self.N * (self.N**2 + 1)) / 2
 
-        self.vars = {}
-        for i in xrange(self.N * self.N):
-            self.vars[i] = xrange(1, self.N*self.N + 1)
+        domain = xrange(1, self.N*self.N + 1)
+        self.vars = {i: domain for i in xrange(self.N * self.N)}
 
         self.__set_constraints()
 

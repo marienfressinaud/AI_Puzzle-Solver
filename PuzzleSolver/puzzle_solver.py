@@ -11,7 +11,7 @@ MIN_LOOPS = 1
 MAX_LOOPS = 2000
 
 MIN_TIME_LIMIT = 5
-MAX_TIME_LIMIT = 600
+MAX_TIME_LIMIT = 1800
 
 
 def exec_game(game_type, env):

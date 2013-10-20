@@ -63,9 +63,10 @@ class ColorGraphManager(StateManager):
         self.nb_v, self.nb_e = self.__read_multiplicities(f)
 
         self.vars = {}
+        domain = xrange(1, self.K + 1)
         for i in xrange(self.nb_v):
             node = self.__read_node(f)
-            self.vars[node[0]] = xrange(1, self.K + 1)
+            self.vars[node[0]] = domain
 
         self.constraints = []
         for i in xrange(self.nb_e):

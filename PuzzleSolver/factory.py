@@ -28,6 +28,7 @@ class Factory():
         list_mc = Factory.__LIST_GAMES["mc"]
         list_sa = Factory.__LIST_GAMES["sa"]
 
+        # Keep only games which have both MC and SA implementation
         return list(set(list_mc.keys()) & set(list_sa.keys()))
 
     def build(cls, game_type, local_search_type):
