@@ -11,7 +11,7 @@ MIN_LOOPS = 1
 MAX_LOOPS = 2000
 
 MIN_TIME_LIMIT = 5
-MAX_TIME_LIMIT = 1800
+MAX_TIME_LIMIT = 3600
 
 
 def exec_game(game_type, env):
@@ -31,13 +31,19 @@ def exec_game(game_type, env):
     game.generate(mode)
     game.run()
 
+    running_time = (time()-game.date_begin) * 1000
+    evaluation = game.evaluate(game.state_manager.state)
+
+    msg = ""
     if game.outofsteps():
-        ui.show_outofsteps_game(game_type, game.number_steps)
+        msg = "out of steps"
     elif game.outoftime():
-        ui.show_outoftime_game(game_type, game.max_time)
+        msg = "out of time"
     else:
-        running_time = time() - game.date_begin
-        ui.show_perfect_game(game_type, game.number_steps, running_time)
+        msg = "perfect game"
+
+    ui.show_end_game(
+        game_type, evaluation, game.number_steps, running_time, msg)
 
 
 def run_games(game, env):
@@ -105,8 +111,8 @@ def main():
     env = {
         "mode": "easy",
         "local_search_type": "mc",
-        "nb_loops": 5,
-        "time_limit": 120,
+        "nb_loops": 20,
+        "time_limit": 3600,
         "verbosity": "off"
     }
 

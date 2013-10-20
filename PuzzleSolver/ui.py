@@ -154,18 +154,9 @@ def show_invalid_file(filename):
     print "Oops, `%s` seems to be an invalid file" % filename
 
 
-def show_outofsteps_game(game, nb_steps):
-    print ("%s out of steps (%d)! " +
-           "We have only found a non perfect result...") \
-        % (game, nb_steps)
+def show_end_game(game_type, evaluation, nb_steps, running_time, msg):
+    end_msg = "This is the end of %s! (%s)" % (game_type, msg)
+    stats = "eval = %2f ; steps = %d ; time = %dms" \
+        % (evaluation, nb_steps, running_time)
 
-
-def show_outoftime_game(game, limit):
-    print ("%s out of time (%d seconds)! " +
-           "We have only found a non perfect result...") \
-        % (game, limit)
-
-
-def show_perfect_game(game, nb_steps, running_time):
-    print "%s has been resolved in %d steps and %.2f seconds!" \
-        % (game, nb_steps, running_time)
+    print end_msg, stats

@@ -50,6 +50,30 @@ class Game(object):
 
         pass
 
+    EVAL_MAX = 1000.0
+
+    def evaluate(self, state):
+        """
+        Evaluates a state (objective function)
+        Min value is 1 and max value is EVAL_MAX
+        """
+
+        # The idea is to subtract the number of violated constraints (NVC) to a
+        # fix value (EVAL_MAX). But since the NVC can be greater than EVAL_MAX
+        # we must keep 0 <= NVC <= EVAL_MAX with a rule of three.
+        # There is still a problem: the number of total constraints is not
+        # perfect because a constraint can modify the count with a coeff (see
+        # Magic Square game with SumEqualsConstraint).
+        # So here we increase this number by a coeff of 1000. It works fine
+        # for this exercise but this solution is far from perfect.
+        total_constraints = len(self.state_manager.constraints) * 1000
+        nb_constraints = self.state_manager.count_constraint_violated(state)
+        _max = Game.EVAL_MAX
+
+        _eval = _max - (nb_constraints * _max) / total_constraints
+
+        return max(1, _eval)
+
     def is_terminated(self):
         """
         Returns True if the current state is an optimal one, False else
